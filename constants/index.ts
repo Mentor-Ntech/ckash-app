@@ -63,8 +63,8 @@ export const services: Record<string, Service[]> = {
   ],
   Nigeria: [
     {
-      name: 'Send',
-      icon: SendMoneyIcon,
+      name: 'Send Money',
+      icon: MpesaIcon,
       navigate: 'NigeriaSendMoney',
     },
     // {
