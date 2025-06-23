@@ -12,12 +12,11 @@ import { navigate } from '@divvi/mobile'
 import Card from '../components/ui/Card'
 import { useTokens } from '../utils'
 import SimpleDropdown from '../components/ui/SimpleDropdown'
-
-// import SearchIcon from '../assets/icons/search.svg'
-
+import { useBalanceVisibility } from '../hooks/useBalanceVisiblity'
+import HideBalance from '../assets/icons/hidebalance-Icon.svg'
 import IconButton from '../components/ui/IconButton'
 import tw from 'twrnc'
-import { services } from '../constants/constant'
+import { services } from '../constants'
 import { calculateTotalUsdValue } from '../lib/cKash'
 import ServiceButton from '../components/ServiceButton'
 
@@ -25,19 +24,16 @@ const Promotions = [
   {
     name: 'Partnership',
     logoOne: '../assets/ckashxmento.png',
-
     externalLink: '/https',
   },
   {
     name: 'Partnership',
     logoOne: '../assets/ckashxmento.png',
-
     externalLink: '/https',
   },
   {
     name: 'Partnership',
     logoOne: '../assets/ckashxmento.png',
-
     externalLink: '/https',
   },
 ]
@@ -47,8 +43,17 @@ export default function WalletScreen(
 ) {
   const [usdBalance, setUsdBalance] = React.useState<number>(0.0)
   const [selectedCountry, setSelectedCountry] = React.useState('Kenya')
-  const [balanceHidden, setBalanceHidden] = React.useState<boolean>(false)
   const [currentIndex, setCurrentIndex] = React.useState(0)
+  
+  // Use the custom hook for balance visibility
+  const { 
+    balanceHidden, 
+    toggleBalanceVisibility, 
+    formatBalance, 
+    formatUsdValue, 
+    formatWalletBalance 
+  } = useBalanceVisibility()
+
   // Dropdown state
   const [dropdownItems] = React.useState([
     { label: '🇰🇪 Kenya', value: 'Kenya' },
@@ -75,7 +80,6 @@ export default function WalletScreen(
   function onPressRecieveMoney() {
     navigate('Receive')
   }
-  // const FeatherIcon = Feather as any;
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -101,10 +105,10 @@ export default function WalletScreen(
       >
         <View style={tw`flex-5 pt-1 w-[100%] justify-center items-center`}>
           <Card
-            style={tw` flex-1 bg-[#0034BB] rounded-lg w-[90%] h-[95%] gap-4 my-4 mx-2.5 justify-between z-10`}
+            style={tw` flex-1 bg-[#0034BB] rounded-lg w-[90%] h-[95%] gap-4 my-4 mx-2.5 justify-between z-10 `}
           >
             {/* Wallet Title */}
-            <View style={tw`flex-row gap-4 pt-2`}>
+            <View style={tw`flex-row items-center gap-2`}>
               <Text
                 style={{
                   color: '#AEC5FF',
@@ -114,9 +118,9 @@ export default function WalletScreen(
               >
                 Wallet Balance
               </Text>
-              <TouchableOpacity
-                onPress={() => setBalanceHidden(!balanceHidden)}
-              ></TouchableOpacity>
+              <TouchableOpacity onPress={toggleBalanceVisibility}>
+                <HideBalance width={16} height={16} />
+              </TouchableOpacity>
             </View>
 
             {/* Wallet Balance */}
@@ -132,7 +136,7 @@ export default function WalletScreen(
                     fontWeight: 'bold',
                   }}
                 >
-                  {balanceHidden ? '*****' : usdBalance}
+                  {formatWalletBalance(usdBalance)}
                 </Text>
               </View>
               <View
@@ -222,7 +226,7 @@ export default function WalletScreen(
 
       {/* Promotion */}
       <View
-        style={tw`flex-1.8 w-[100%]  bg-transparent justify-center items-center`}
+        style={tw`flex-1.8 w-[100%] bg-transparent justify-center items-center`}
       >
         <View style={tw`w-full bg-transparent h-[90%] p-0 m-0 shadow-none`}>
           <TouchableOpacity
@@ -240,7 +244,7 @@ export default function WalletScreen(
 
       {/* Tokens */}
       <View style={tw`flex-4 w-[100%] px-4`}>
-        <View style={tw`px-2  pb-2`}>
+        <View style={tw`px-2 pb-2`}>
           <View style={tw`flex-row justify-between items-center mb-2`}>
             <Text style={tw`font-medium text-base text-[#1B1A46]`}>
               My Assets
@@ -254,7 +258,7 @@ export default function WalletScreen(
             contentContainerStyle={tw`pb-4`}
             renderItem={({ item }) => (
               <View
-                style={tw`flex-row items-center bg-white rounded-lg  py-1 mb-2 overflow-y-hidden`}
+                style={tw`flex-row items-center bg-white rounded-lg py-1 mb-2 overflow-y-hidden`}
               >
                 <Image
                   source={{ uri: item.imageUrl }}
@@ -269,13 +273,10 @@ export default function WalletScreen(
                 </View>
                 <View style={tw`items-end`}>
                   <Text style={tw`font-bold text-base text-[#0034BB]`}>
-                    {Number(item.balance).toFixed(4)}
+                    {formatBalance(item.balance.toString())}
                   </Text>
                   <Text style={tw`text-xs text-gray-500`}>
-                    $
-                    {(
-                      Number(item.balance) * Number(item.lastKnownPriceUsd)
-                    ).toFixed(4)}
+                    {formatUsdValue(Number(item.balance), Number(item.lastKnownPriceUsd))}
                   </Text>
                 </View>
               </View>
