@@ -11,6 +11,8 @@ import { RootStackScreenProps } from '../../types'
 import { useSend } from '../../../hooks/useSend'
 import { useTokens } from '../../../utils'
 import { useWalletClient } from '@divvi/mobile'
+import BottomSheet from 'src/components/BottomSheet'
+
 import {
   getExchangeRate,
   getRatedAmount,
@@ -56,7 +58,8 @@ export default function SendMoney(
   const [localBalance, setLocalBalance] = React.useState<number>(0.0)
   const { sendMoney, loading,isError } = useSend()
   const { tokens, cUSDToken } = useTokens()
-
+  
+  const sheetRef = React.useRef<any>(null);
   const banks: Bank[] = [
     { id: 'opay', name: 'Opay', logo: OpayIcon },
     { id: 'moniepoint', name: 'Moniepoint', logo: MoniepointIcon },
@@ -280,7 +283,7 @@ export default function SendMoney(
           isNaN(Number(tokenAmount)) ||
           Number(tokenAmount) <= 0}
         label="Continue" isLoading={loading} />
-
+     
      
       <AlertModal
         visible={modalVisible}
@@ -294,6 +297,7 @@ export default function SendMoney(
         loading={loading}
         accountName={accountName ? `Recipient: ${accountName}` : ''}
       />
+      <BottomSheet forwardedRef={sheetRef}/>
     </ScrollView>
   )
 }
