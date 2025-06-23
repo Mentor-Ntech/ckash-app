@@ -6,8 +6,8 @@ import {
   TransactionRequestEIP1559,
 } from 'viem'
 import { celo } from 'viem/chains'
-import { CHAIN_ID, PRETIUM_ADDRESS } from '../constants'
-import { Pretium_api } from '../constants'
+import { CHAIN_ID, PRETIUM_ADDRESS } from '../constants/constant'
+import { Pretium_api } from '../constants/constant'
 import { TokenBalance } from '@divvi/mobile/src/tokens/slice'
 
 import { TransactionRequestCIP64 } from 'viem/chains'

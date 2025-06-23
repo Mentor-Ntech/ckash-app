@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSendTransactionStable } from './useSendTransactionStable'
-import { PRETIUM_ADDRESS, Pretium_api } from '../constants/index'
+import { PRETIUM_ADDRESS, Pretium_api } from '../constants/constant'
 import { TokenBalance } from '@divvi/mobile/src/tokens/slice'
 import { CountryCodes, PaymentType } from '../api/types'
 

@@ -41,7 +41,7 @@ import {
   getRatedAmountToLocalCurrency,
   sendTransactionStable,
 } from '../../../lib/cKash'
-import { PRETIUM_ADDRESS } from '../../../constants'
+import { PRETIUM_ADDRESS } from '../../../constants/constant'
 import { TokenBalance } from 'src/tokens/slice'
 import tw from 'twrnc'
 import ContactList from '../../../components/ContactList'

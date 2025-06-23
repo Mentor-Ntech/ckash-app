@@ -3,7 +3,7 @@ import { navigate } from '@divvi/mobile'
 import { RootStackScreenProps } from './types'
 import { View, StyleSheet, Text, FlatList, Pressable } from 'react-native'
 import SimpleDropdown from '../components/ui/SimpleDropdown'
-import { services } from '../constants'
+import { services } from '../constants/constant'
 import tw from 'twrnc'
 
 export default function ServiceScreen(_props: RootStackScreenProps<'Service'>) {
