@@ -17,7 +17,7 @@ import SimpleDropdown from '../components/ui/SimpleDropdown'
 
 import IconButton from '../components/ui/IconButton'
 import tw from 'twrnc'
-import { services } from '../constants'
+import { services } from '../constants/constant'
 import { calculateTotalUsdValue } from '../lib/cKash'
 import ServiceButton from '../components/ServiceButton'
 
