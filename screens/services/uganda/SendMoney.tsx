@@ -51,11 +51,16 @@ export default function UgandaSendMoney(
   const { tokens, cUSDToken } = useTokens()
   const [modalVisible, setModalVisible] = React.useState(false)
 
-  const { openContactPicker } = useContactPicker({
-    onContactSelect: (formattedNumber: string) => {
-      setAccountNumber(formattedNumber)
-    },
-  })
+  const {
+      openContactPicker,
+      closeContactPicker,
+      isModalVisible,
+      handleContactSelect,
+    } = useContactPicker({
+      onContactSelect: (formattedNumber: string) => {
+        setAccountNumber(formattedNumber)
+      },
+    })
 
   const fetchTokenAmount = React.useCallback(
     debounce(async (text: string) => {
@@ -93,6 +98,10 @@ export default function UgandaSendMoney(
 
   const handleAmountChange = (text: string) => {
     setAmount(text)
+    if (!text || isNaN(Number(text))) {
+      setTokenAmount('')
+      return
+    }
     fetchTokenAmount(text)
   }
 
@@ -256,9 +265,23 @@ export default function UgandaSendMoney(
       {/* Continue Button */}
       <PrimaryButton
         onPress={handleSendMoney}
+        disabled={!amount ||
+          isNaN(Number(amount)) ||
+          !accountNumber ||
+          !accountName ||
+          Number(amount) < 500 || 
+          !selectedBank?.name||
+          !tokenAmount ||
+          isNaN(Number(tokenAmount)) ||
+          Number(tokenAmount) <= 0}
         label="Continue"
         isLoading={loading}
       />
+      <ContactPickerModal
+              visible={isModalVisible}
+              onClose={closeContactPicker}
+              onContactSelect={handleContactSelect}
+            />
 
       <AlertModal
         visible={modalVisible}

@@ -13,7 +13,7 @@ import { RootStackScreenProps } from '../../types'
 import { useSend } from '../../../hooks/useSend'
 import { useTokens } from '../../../utils'
 import { useWalletClient } from '@divvi/mobile'
-import { getRatedAmount } from '../../../lib/cKash'
+import { calculateTotalUsdValue, getRatedAmount, getRatedAmountToLocalCurrency } from '../../../lib/cKash'
 import debounce from 'lodash.debounce'
 import { TokenBalance } from 'src/tokens/slice'
 import AlertModal from '../../../components/AlertModal'
@@ -25,13 +25,15 @@ import InputField from '../../../components/InputField'
 export default function MPESABuyGoods(
   _props: RootStackScreenProps<'KenyaBuyGoods'>,
 ) {
-  const [tillNumber, setTillNumber] = React.useState<string>('100')
-  const [amount, setAmount] = React.useState<string>('5035')
+  const [tillNumber, setTillNumber] = React.useState<string>('')
+  const [amount, setAmount] = React.useState<string>('')
   const [tokenAmount, setTokenAmount] = React.useState<string>('')
   const [modalVisible, setModalVisible] = React.useState(false)
+  const [localBalance, setLocalBalance] = React.useState<number>(0.0)
+  
   const { data: walletClient } = useWalletClient({ networkId: 'celo-mainnet' })
   const { sendMoney, loading,isError } = useSend()
-  const { cUSDToken } = useTokens()
+  const { cUSDToken,tokens } = useTokens()
 
   const fetchTokenAmount = React.useCallback(
     debounce(async (text: string) => {
@@ -86,6 +88,13 @@ export default function MPESABuyGoods(
       Alert.alert(`${error}`)
     }
   }
+ React.useEffect(() => {
+      if (!tokens || tokens.length === 0) return
+      let totalUsdValue = calculateTotalUsdValue(tokens)
+      getRatedAmountToLocalCurrency(Number(totalUsdValue), 'KES').then((value) =>
+        setLocalBalance(Number(value)),
+      )
+    }, [tokens])
 
   return (
     <ScrollView
@@ -114,9 +123,16 @@ export default function MPESABuyGoods(
         <View style={tw`mb-4`}>
           <View style={tw`flex-row justify-between items-center mb-2`}>
             <Text style={tw`text-sm text-gray-900 font-medium`}>Amount</Text>
-            <Text style={tw`text-sm font-medium text-sm text-black`}>
-              ₦245.31
-            </Text>
+           <Text
+                       style={{
+                         textAlign: 'left',
+                         fontFamily: 'Heebo-Medium',
+                         fontSize: 14,
+                         color: '#1B1A46',
+                       }}
+                     >
+                       KES {localBalance}
+                     </Text>
           </View>
           <View
             style={tw`flex-row items-center bg-white border border-[#DAE3FF] rounded py-2 mb-2 bg-[#DAE3FF]`}

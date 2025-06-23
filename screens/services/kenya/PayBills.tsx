@@ -12,7 +12,7 @@ import { RootStackScreenProps } from '../../types'
 import { useSend } from '../../../hooks/useSend'
 import { useTokens } from '../../../utils'
 import { useWalletClient } from '@divvi/mobile'
-import { getRatedAmount } from '../../../lib/cKash'
+import { calculateTotalUsdValue, getRatedAmount, getRatedAmountToLocalCurrency } from '../../../lib/cKash'
 import debounce from 'lodash.debounce'
 import { TokenBalance } from 'src/tokens/slice'
 import AlertModal from '../../../components/AlertModal'
@@ -31,8 +31,10 @@ export default function MPESAPaybills(
   const [modalVisible, setModalVisible] = React.useState(false)
   const { data: walletClient } = useWalletClient({ networkId: 'celo-mainnet' })
   const [tokenAmount, setTokenAmount] = React.useState<string>('')
+  const [localBalance, setLocalBalance] = React.useState<number>(0.0)
+  
   const { sendMoney, loading,isError } = useSend()
-  const { cUSDToken } = useTokens()
+  const { cUSDToken,tokens } = useTokens()
   const fetchTokenAmount = React.useCallback(
     debounce(async (text: string) => {
       const numericValue = parseFloat(text)
@@ -96,6 +98,15 @@ export default function MPESAPaybills(
       Alert.alert(`${error}`)
     }
   }
+
+  React.useEffect(() => {
+      if (!tokens || tokens.length === 0) return
+      let totalUsdValue = calculateTotalUsdValue(tokens)
+      getRatedAmountToLocalCurrency(Number(totalUsdValue), 'KES').then((value) =>
+        setLocalBalance(Number(value)),
+      )
+    }, [tokens])
+
   return (
     <ScrollView
       style={tw`flex-1 bg-qhitw px-4`}
@@ -136,9 +147,16 @@ export default function MPESAPaybills(
         <View style={tw`mb-4`}>
           <View style={tw`flex-row justify-between items-center mb-2`}>
             <Text style={tw`text-sm text-gray-900 font-medium`}>Amount</Text>
-            <Text style={tw`text-sm font-medium text-sm text-black`}>
-              Kes 245.31
-            </Text>
+<Text
+            style={{
+              textAlign: 'left',
+              fontFamily: 'Heebo-Medium',
+              fontSize: 14,
+              color: '#1B1A46',
+            }}
+          >
+            KES {localBalance}
+          </Text>
           </View>
           <View
             style={tw`flex-row items-center bg-white border border-[#DAE3FF] rounded py-2 mb-2 bg-[#DAE3FF]`}

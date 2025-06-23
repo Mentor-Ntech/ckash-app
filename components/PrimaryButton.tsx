@@ -23,7 +23,7 @@ export default function PrimaryButton({
   return (
     <TouchableOpacity
       style={[tw`rounded-lg p-4 mb-4`,
-        disabled ? tw`bg-gray-400` : tw`bg-[#2B5CE6]`,
+        disabled ? tw`bg-[#DAE3FF]` : tw`bg-[#2B5CE6]`,
         style]}
       onPress={onPress}
       disabled={disabled}

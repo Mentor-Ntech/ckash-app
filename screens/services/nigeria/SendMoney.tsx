@@ -120,14 +120,13 @@ export default function SendMoney(
 
   const account_name = async (account_number: string) => {
     try {
-      // Adjust type and mobile_network as needed for your use case
+      
       const result = await validateAccount({
         account_number: account_number,
         bank_code: bankcode,
         country_code: 'NGN',
       })
-      // console.log('THE RESULT', result?.data?.public_name)
-      // Assume result.data.name or similar contains the public name
+      
       setAccountName(result || null)
     } catch (error) {
       setAccountName(null)
@@ -179,10 +178,10 @@ export default function SendMoney(
         to: cUSDToken?.address as `0x${string}`,
         feeCurrency: cUSDToken?.address as `0x${string}`,
       })
-      console.log('THE RESPONSE', response)
+      
       setModalVisible(true)
     } catch (error) {
-      console.log('THE ERROR', error)
+     
       Alert.alert('Error', `Transaction failed: ${error}`)
     }
   }
@@ -205,7 +204,7 @@ export default function SendMoney(
             return (
               <TouchableOpacity
                 key={bank.id}
-                style={tw`bg-white rounded-lg py-3 px-4 items-center flex-1 border-2 ${
+                style={tw`bg-white rounded-lg py-3 px-2 items-center flex-1 border-2 ${
                   selectedBank?.id === bank.id
                     ? 'border-blue-600'
                     : 'border-transparent'
@@ -266,11 +265,21 @@ export default function SendMoney(
           placeholderTextColor="#A0A0A0"
           keyboardType="numeric"
         />
-        <Text style={tw`text-[#EEA329] text-xs`}>(min: ₦200 max ₦60,000)</Text>
+        <Text style={tw`text-[#EEA329] text-xs`}>(min: ₦100 max ₦1,000,000)</Text>
       </View>
 
       {/* Continue Button */}
-           <PrimaryButton onPress={handleSendMoney} label="Continue" isLoading={loading} />
+      <PrimaryButton onPress={handleSendMoney}
+        disabled={!amount ||
+          isNaN(Number(amount)) ||
+          !accountNumber ||
+          !accountName ||
+          Number(amount) < 100 || 
+          !selectedBank?.name||
+          !tokenAmount ||
+          isNaN(Number(tokenAmount)) ||
+          Number(tokenAmount) <= 0}
+        label="Continue" isLoading={loading} />
 
      
       <AlertModal

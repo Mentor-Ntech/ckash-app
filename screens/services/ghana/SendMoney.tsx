@@ -89,7 +89,7 @@ export default function GhanaSendMoney(
 
   const banks: Bank[] = [
     { id: 'mtn', name: 'MTN', logo: MtnIcon },
-    { id: 'telecel', name: 'Telecel', logo: TelecelIcon },
+    { id: 'telecel', name: 'Telcel', logo: TelecelIcon },
     { id: 'airteltigo', name: 'AirtelTigo', logo: AirtelTigoIcon },
   ]
 
@@ -142,6 +142,10 @@ export default function GhanaSendMoney(
 
   const handleAmountChange = (text: string) => {
     setAmount(text)
+    if (!text || isNaN(Number(text))) {
+      setTokenAmount('')
+      return
+    }
     fetchTokenAmount(text)
   }
 
@@ -275,6 +279,15 @@ export default function GhanaSendMoney(
       <PrimaryButton
         onPress={handleSendMoney}
         label="Continue"
+        disabled={!amount ||
+          isNaN(Number(amount)) ||
+          !accountNumber ||
+          !accountName ||
+          Number(amount) < 5 || 
+          !selectedBank?.name||
+          !tokenAmount ||
+          isNaN(Number(tokenAmount)) ||
+          Number(tokenAmount) <= 0}
         isLoading={loading}
       />
 
