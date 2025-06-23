@@ -1,3 +1,5 @@
+import 'react-native-gesture-handler'
+import 'react-native-reanimated'
 import { createApp } from '@divvi/mobile'
 import { registerRootComponent } from 'expo'
 import Constants from 'expo-constants'
@@ -31,7 +33,9 @@ import BuyGoods from './screens/services/kenya/BuyGoods'
 import PayBills from './screens/services/kenya/PayBills'
 import GhanaSendMoney from './screens/services/ghana/SendMoney'
 import UgandaSendMoney from './screens/services/uganda/SendMoney'
-
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { RootStackScreenProps } from './screens/types'
 
 
 const expoConfig = Constants.expoConfig
@@ -115,7 +119,11 @@ const App = createApp({
       <>
         <Screen
           name="KenyaSendMoney"
-          component={KenyaSendMoney}
+          component={(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"KenyaSendMoney">) => (
+            <BottomSheetModalProvider>
+              <KenyaSendMoney {...props} />
+            </BottomSheetModalProvider>
+          )}
           options={{
             headerBackVisible: true,
             headerShown: true,
@@ -124,7 +132,11 @@ const App = createApp({
         />
         <Screen
           name="UgandaSendMoney"
-          component={UgandaSendMoney}
+          component={(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"UgandaSendMoney">) => (
+            <BottomSheetModalProvider>
+              <UgandaSendMoney {...props} />
+            </BottomSheetModalProvider>
+          )}
           options={{
             headerBackVisible: true,
             headerShown: true,
@@ -133,7 +145,12 @@ const App = createApp({
         />
         <Screen
           name="NigeriaSendMoney"
-          component={NigeriaSendMoney}
+          component={(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"NigeriaSendMoney">) => (
+            <BottomSheetModalProvider>
+              <NigeriaSendMoney {...props} />
+            </BottomSheetModalProvider>
+          )}
+    
           options={{
             headerBackVisible: true,
             headerShown: true,
@@ -143,7 +160,11 @@ const App = createApp({
 
         <Screen
           name="GhanaSendMoney"
-          component={GhanaSendMoney}
+          component={(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"GhanaSendMoney">) => (
+            <BottomSheetModalProvider>
+              <GhanaSendMoney {...props} />
+            </BottomSheetModalProvider>
+          )}
           options={{
             headerBackVisible: true,
             headerShown: true,
@@ -199,6 +220,7 @@ const App = createApp({
           }}
         />
       </>
+      
     ),
   },
 
@@ -248,4 +270,14 @@ const App = createApp({
   },
 })
 
-registerRootComponent(App)
+function AppWrapper() {
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <BottomSheetModalProvider>
+        <App />
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
+  );
+}
+
+registerRootComponent(AppWrapper)

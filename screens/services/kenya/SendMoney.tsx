@@ -29,6 +29,7 @@ import ContactListIcon from '../../../assets/icons/list-icon.svg'
 import PrimaryButton from '../../../components/PrimaryButton'
 import InputField from '../../../components/InputField'
 import { useContactPicker } from '../../../hooks/useContactPicker'
+import { TokenSelectorRef, TokenSelectorSheet } from '../../../components/TokenSelectorSheet'
 
 export type TransactionRequest = (
   | TransactionRequestCIP64
@@ -52,6 +53,10 @@ export default function SendMoney(
   const [modalVisible, setModalVisible] = React.useState(false)
   const [accountName, setAccountName] = React.useState<string | null>(null)
 
+  const [selectedToken, setSelectedToken] = React.useState<TokenBalance | null>(null)
+    const [openBottom,setOpenBottom]= React.useState<boolean>(true)
+    const tokenSheetRef = React.useRef<TokenSelectorRef>(null)
+
   const {
     openContactPicker,
     closeContactPicker,
@@ -62,6 +67,11 @@ export default function SendMoney(
       setPhoneNumber(formattedNumber)
     },
   })
+
+  const openSheet = () => {
+    tokenSheetRef.current?.open() 
+    setOpenBottom(false)
+  };
 
   const handlePhoneChange = (text: string) => {
     const cleaned = text.replace(/[^0-9]/g, '')
@@ -106,10 +116,10 @@ export default function SendMoney(
         rawAmount: amount,
         type: 'MOBILE',
         mobileNetwork: 'Safaricom',
-        tokenBalance: cUSDToken as TokenBalance,
+        tokenBalance: selectedToken as TokenBalance,
         from: walletClient?.account?.address as `0x${string}`,
-        to: cUSDToken?.address as `0x${string}`,
-        feeCurrency: cUSDToken?.address as `0x${string}`,
+        to: selectedToken?.address as `0x${string}`,
+        feeCurrency: selectedToken?.address as `0x${string}`,
       })
       console.log('THE RESPONSE', response)
       setModalVisible(true)
@@ -252,26 +262,38 @@ export default function SendMoney(
         <Text style={tw`text-[#EEA329] text-xs`}>(min. 20 max 250,000)</Text>
       </View>
 
-      {/* Continue Button */}
+      
 
-      <PrimaryButton
-        onPress={handleSendMoney}
-        disabled={!amount ||
-          isNaN(Number(amount)) ||
-          Number(amount) < 20 || 
-          !tokenAmount ||
-          isNaN(Number(tokenAmount)) ||
-          Number(tokenAmount) <= 0}
-        label="Continue"
-        isLoading={loading}
-      />
-
+      {openBottom?<PrimaryButton onPress={openSheet}
+              disabled={!amount ||
+                isNaN(Number(amount)) ||
+                Number(amount) < 20 ||
+                !phoneNumber?.trim()
+                }
+              label="Continue" isLoading={loading} />:<PrimaryButton onPress={handleSendMoney}
+              disabled={!amount ||
+                isNaN(Number(amount)) ||
+                !phoneNumber?.trim() ||
+               
+                Number(amount) < 20 ||                 
+                !selectedToken||
+                !tokenAmount ||
+                isNaN(Number(tokenAmount)) ||
+                Number(tokenAmount) <= 0}
+              label="Send" isLoading={loading} />}
+            
       {/* Contact Picker Modal */}
       <ContactPickerModal
         visible={isModalVisible}
         onClose={closeContactPicker}
         onContactSelect={handleContactSelect}
       />
+
+           <TokenSelectorSheet
+              ref={tokenSheetRef}
+              tokens={tokens}
+              onSelect={(token) => setSelectedToken(token)}
+            />
 
       <AlertModal
         visible={modalVisible}

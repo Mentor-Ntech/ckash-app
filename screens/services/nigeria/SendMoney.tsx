@@ -6,12 +6,15 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  Image,
+  Button,
+  FlatList,
 } from 'react-native'
 import { RootStackScreenProps } from '../../types'
 import { useSend } from '../../../hooks/useSend'
 import { useTokens } from '../../../utils'
 import { useWalletClient } from '@divvi/mobile'
-import BottomSheet from 'src/components/BottomSheet'
+//import BottomSheet from '../../../components/BottomSheet'
 
 import {
   getExchangeRate,
@@ -32,6 +35,10 @@ import ContactListIcon from '../../../assets/icons/list-icon.svg'
 import OpayIcon from '../../../assets/icons/opay-icon.svg'
 import MoniepointIcon from '../../../assets/icons/moniepoint-icon.svg'
 import PalmpayIcon from '../../../assets/icons/palmpay-icon.svg'
+
+import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+
+import { TokenSelectorRef, TokenSelectorSheet } from '../../../components/TokenSelectorSheet'
 interface Contact {
   phone: string
   name: string
@@ -49,27 +56,30 @@ export default function SendMoney(
   const [selectedBank, setSelectedBank] = React.useState<Bank | null>(null)
   const [accountNumber, setAccountNumber] = React.useState<string>('')
   const [accountName, setAccountName] = React.useState<string | null>(null)
-  const [activeTab, setActiveTab] = React.useState<'saved' | 'recent'>('saved')
+  
   const [amount, setAmount] = React.useState<string>('')
   const [bankcode, setBankCode] = React.useState('')
   const [modalVisible, setModalVisible] = React.useState(false)
   const { data: walletClient } = useWalletClient({ networkId: 'celo-mainnet' })
   const [tokenAmount, setTokenAmount] = React.useState<string>('')
   const [localBalance, setLocalBalance] = React.useState<number>(0.0)
+   
+  const [selectedToken, setSelectedToken] = React.useState<TokenBalance | null>(null)
+  const [openBottom,setOpenBottom]= React.useState<boolean>(true)
+  const tokenSheetRef = React.useRef<TokenSelectorRef>(null)
   const { sendMoney, loading,isError } = useSend()
-  const { tokens, cUSDToken } = useTokens()
+  const { tokens } = useTokens()
   
-  const sheetRef = React.useRef<any>(null);
+  
+  const openSheet = () => {
+    tokenSheetRef.current?.open() 
+    setOpenBottom(false)
+  };
   const banks: Bank[] = [
     { id: 'opay', name: 'Opay', logo: OpayIcon },
     { id: 'moniepoint', name: 'Moniepoint', logo: MoniepointIcon },
     { id: 'palmpay', name: 'Palmpay', logo: PalmpayIcon },
-  ]
-
-  const savedContacts: Contact[] = [
-    { phone: '09012345678', name: 'PABLO LEMONR' },
-    { phone: '08098765432', name: 'JOHN DOE' },
-  ]
+  ]  
 
   const handleBankSelect = (bank: Bank) => {
     setSelectedBank(bank)
@@ -81,11 +91,7 @@ export default function SendMoney(
     const cleaned = text.replace(/[^0-9]/g, '')
     setAccountNumber(cleaned)
   }
-
-  const selectContact = (contact: Contact) => {
-    setAccountNumber(contact.phone)
-    setAccountName(contact.name)
-  }
+  
 
   const fetchTokenAmount = React.useCallback(
     debounce(async (text: string) => {
@@ -176,10 +182,10 @@ export default function SendMoney(
         bank_code: bankcode,
         bank_name: selectedBank.name,
         mobileNetwork: selectedBank.name as MobileNetwork,
-        tokenBalance: cUSDToken as TokenBalance,
+        tokenBalance: selectedToken as TokenBalance,
         from: walletClient?.account?.address as `0x${string}`,
-        to: cUSDToken?.address as `0x${string}`,
-        feeCurrency: cUSDToken?.address as `0x${string}`,
+        to: selectedToken?.address as `0x${string}`,
+        feeCurrency: selectedToken?.address as `0x${string}`,
       })
       
       setModalVisible(true)
@@ -190,6 +196,7 @@ export default function SendMoney(
   }
 
   return (
+    
     <ScrollView
       style={tw`flex-1 bg-[#F5F7FA] px-4`}
       showsVerticalScrollIndicator={false}
@@ -272,19 +279,35 @@ export default function SendMoney(
       </View>
 
       {/* Continue Button */}
-      <PrimaryButton onPress={handleSendMoney}
+      {openBottom?<PrimaryButton onPress={openSheet}
         disabled={!amount ||
           isNaN(Number(amount)) ||
           !accountNumber ||
           !accountName ||
           Number(amount) < 100 || 
-          !selectedBank?.name||
+          !selectedBank?.name
+          }
+        label="Continue" isLoading={loading} />:<PrimaryButton onPress={handleSendMoney}
+        disabled={!amount ||
+          isNaN(Number(amount)) ||
+          !accountNumber ||
+          !accountName ||
+          Number(amount) < 100 || 
+          !selectedBank?.name ||
+          !selectedToken||
           !tokenAmount ||
           isNaN(Number(tokenAmount)) ||
           Number(tokenAmount) <= 0}
-        label="Continue" isLoading={loading} />
+        label="Send" isLoading={loading} />}
+      
      
-     
+    
+
+     <TokenSelectorSheet
+        ref={tokenSheetRef}
+        tokens={tokens}
+        onSelect={(token) => setSelectedToken(token)}
+      />
       <AlertModal
         visible={modalVisible}
         onClose={() => {
@@ -297,7 +320,8 @@ export default function SendMoney(
         loading={loading}
         accountName={accountName ? `Recipient: ${accountName}` : ''}
       />
-      <BottomSheet forwardedRef={sheetRef}/>
-    </ScrollView>
+     
+      </ScrollView>
+    
   )
 }
