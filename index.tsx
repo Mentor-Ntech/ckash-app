@@ -4,9 +4,9 @@ import Constants from 'expo-constants'
 import BrandLogo from './assets/BrandLogo'
 import WelcomeLogo from './assets/WelcomeLogo'
 import HomeScreen from './screens/HomeScreen'
-import ActivityIcon from './assets/ActivityTabIcon'
-import WalletIcon from './assets/WalletTabIcon'
-import UtilityIcon from './assets/UtilityTabIcon'
+import ActivityIcon from './assets/icons/activitytab-icon.svg'
+import WalletIcon from './assets/icons/wallettab-icon.svg'
+import UtilityIcon from './assets/icons/utilitytab-icon.svg'
 import {
   CKES_TOKEN_ID,
   CUSD_TOKEN_ID,
