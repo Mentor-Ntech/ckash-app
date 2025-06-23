@@ -136,7 +136,14 @@ export default function MPESABuyGoods(
         </View>
 
         {/* Continue Button */}
- <PrimaryButton onPress={handleBuyGoods} label="Continue" isLoading={loading} />
+        <PrimaryButton onPress={handleBuyGoods}
+          disabled={!amount ||
+            isNaN(Number(amount)) ||
+            Number(amount) < 20 || 
+            !tokenAmount ||
+            isNaN(Number(tokenAmount)) ||
+            Number(tokenAmount) <= 0}
+          label="Continue" isLoading={loading} />
 
         {/* Disclaimer */}
         <View style={tw`flex-row items-center`}>

@@ -53,6 +53,10 @@ export default function MPESAPaybills(
 
   const handleAmountChange = (text: string) => {
     setAmount(text)
+    if (!text || isNaN(Number(text))) {
+      setTokenAmount('')
+      return
+    }
     fetchTokenAmount(text)
   }
 
@@ -64,8 +68,12 @@ export default function MPESAPaybills(
   }
   const handleSendMoney = async () => {
     try {
-      if (!tokenAmount || tokenAmount == null || tokenAmount == undefined) {
-        Alert.alert('Please provide Amount')
+      if (!accountNumber.trim() ||
+      !paybillNumber.trim() ||
+      !tokenAmount ||
+      isNaN(Number(tokenAmount)) ||
+      Number(tokenAmount) <= 0) {
+        Alert.alert('Please provide valid payment details')
         return
       }
 
@@ -150,7 +158,14 @@ export default function MPESAPaybills(
         </View>
 
         {/* Continue Button */}
-        <PrimaryButton onPress={handleSendMoney} label="Continue" isLoading={loading} />
+        <PrimaryButton onPress={handleSendMoney}
+          disabled={!amount ||
+            isNaN(Number(amount)) ||
+            Number(amount) < 20 || 
+            !tokenAmount ||
+            isNaN(Number(tokenAmount)) ||
+            Number(tokenAmount) <= 0}
+          label="Continue" isLoading={loading} />
 
         {/* Disclaimer */}
         <View style={tw`flex-row items-center`}>

@@ -7,7 +7,8 @@ interface PrimaryButtonProps {
   label: string 
   style?: any
   textStyle?: any
-  isLoading?:boolean
+  isLoading?: boolean,
+  disabled?: boolean
 }
 
 export default function PrimaryButton({
@@ -15,12 +16,17 @@ export default function PrimaryButton({
   label,
   style,
   textStyle,
-  isLoading
+  isLoading,
+  disabled
+  
 }: PrimaryButtonProps) {
   return (
     <TouchableOpacity
-      style={[tw`bg-[#2B5CE6] rounded-lg p-4 mb-4`, style]}
+      style={[tw`rounded-lg p-4 mb-4`,
+        disabled ? tw`bg-gray-400` : tw`bg-[#2B5CE6]`,
+        style]}
       onPress={onPress}
+      disabled={disabled}
     >
       {isLoading ? (
         <View style={tw`flex-row items-center justify-center`}>

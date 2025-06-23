@@ -88,6 +88,10 @@ export default function SendMoney(
 
   const handleAmountChange = (text: string) => {
     setAmount(text)
+    if (!text || isNaN(Number(text))) {
+      setTokenAmount('')
+      return
+    }
     fetchTokenAmount(text)
   }
   const handleSendMoney = async () => {
@@ -252,6 +256,12 @@ export default function SendMoney(
 
       <PrimaryButton
         onPress={handleSendMoney}
+        disabled={!amount ||
+          isNaN(Number(amount)) ||
+          Number(amount) < 20 || 
+          !tokenAmount ||
+          isNaN(Number(tokenAmount)) ||
+          Number(tokenAmount) <= 0}
         label="Continue"
         isLoading={loading}
       />
