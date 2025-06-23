@@ -1,5 +1,4 @@
 import * as React from 'react'
-import tw from 'twrnc'
 import {
   View,
   TextInput,
@@ -7,6 +6,7 @@ import {
   Alert,
   ScrollView,
   TouchableOpacity,
+  StyleSheet,
 } from 'react-native'
 import { RootStackScreenProps } from '../../types'
 import { useWalletClient } from '@divvi/mobile'
@@ -155,52 +155,16 @@ export default function SendMoney(
     )
   }, [tokens])
   return (
-    <ScrollView
-      style={tw`flex-1 bg-[#F5F7FA] px-4`}
-      showsVerticalScrollIndicator={false}
-    >
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Bank Selection Card */}
-      <View
-        style={tw`bg-[#EFF3FF] border border-[#AEC5FF] rounded-lg p-6 mb-4`}
-      >
-        <Text
-          style={{
-            textAlign: 'left',
-            fontFamily: 'Heebo-Medium',
-            fontSize: 14,
-            marginBottom: 8,
-            color: '#1B1A46',
-          }}
-        >
-          Select Bank
-        </Text>
-        <View style={tw`flex flex-coljustify-start`}>
+      <View style={styles.bankCard}>
+        <Text style={styles.bankTitle}>Select Bank</Text>
+        <View style={styles.bankLogoContainer}>
           <MpesaIcon width={200} height={40} />
-          <Text
-            style={{
-              marginLeft: 80,
-              marginTop: 4,
-              fontFamily: 'Heebo-Medium',
-              fontSize: 14,
-              color: '#1B1A46',
-            }}
-          >
-            M-pesa
-          </Text>
+          <Text style={styles.bankName}>M-pesa</Text>
         </View>
 
-        <Text
-          style={{
-            textAlign: 'left',
-            marginTop: 24,
-            marginBottom: 8,
-            fontFamily: 'Heebo-Medium',
-            fontSize: 14,
-            color: '#1B1A46',
-          }}
-        >
-          Mobile Number
-        </Text>
+        <Text style={styles.inputLabel}>Mobile Number</Text>
         <InputField
           value={phoneNumber}
           onChangeText={handlePhoneChange}
@@ -211,57 +175,40 @@ export default function SendMoney(
           onIconPress={openContactPicker}
         />
         {phoneNumber && (
-          <Text
-            style={{
-              textAlign: 'left',
-              fontFamily: 'Heebo-Regular',
-              fontSize: 14,
-              color: '#1B1A46',
-            }}
-          >
+          <Text style={styles.accountNameText}>
             Account name: {accountName}
           </Text>
         )}
       </View>
 
       {/* Amount Input */}
-      <View style={tw` mb-4`}>
-        <View style={tw`flex-row justify-between items-center my-2`}>
-          <Text style={tw`text-left font-medium text-sm text-[#1B1A46]`}>
-            Enter Amount (KES)
-          </Text>
-          <Text
-            style={{
-              textAlign: 'left',
-              fontFamily: 'Heebo-Medium',
-              fontSize: 14,
-              color: '#1B1A46',
-            }}
-          >
-            KES {localBalance}
-          </Text>
+      <View style={styles.amountSection}>
+        <View style={styles.amountHeader}>
+          <Text style={styles.amountLabel}>Enter Amount (KES)</Text>
+          <Text style={styles.balanceText}>KES {localBalance}</Text>
         </View>
         <TextInput
-          style={tw`bg-white border border-[#B2C7FF] rounded px-4 py-4 mb-1 bg-[#DAE3FF]`}
+          style={styles.amountInput}
           value={amount}
           onChangeText={handleAmountChange}
           placeholder="KES 100"
           placeholderTextColor="#A0A0A0"
           keyboardType="numeric"
         />
-        <Text style={tw`text-[#EEA329] text-xs`}>(min. 20 max 250,000)</Text>
+        <Text style={styles.limitText}>(min. 20 max 250,000)</Text>
       </View>
 
       {/* Continue Button */}
-
       <PrimaryButton
         onPress={handleSendMoney}
-        disabled={!amount ||
+        disabled={
+          !amount ||
           isNaN(Number(amount)) ||
-          Number(amount) < 20 || 
+          Number(amount) < 20 ||
           !tokenAmount ||
           isNaN(Number(tokenAmount)) ||
-          Number(tokenAmount) <= 0}
+          Number(tokenAmount) <= 0
+        }
         label="Continue"
         isLoading={loading}
       />
@@ -288,3 +235,85 @@ export default function SendMoney(
     </ScrollView>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F5F7FA',
+    paddingHorizontal: 16,
+  },
+  bankCard: {
+    backgroundColor: '#EFF3FF',
+    borderWidth: 1,
+    borderColor: '#AEC5FF',
+    borderRadius: 8,
+    padding: 24,
+    marginBottom: 16,
+  },
+  bankTitle: {
+    textAlign: 'left',
+    fontFamily: 'Heebo-Medium',
+    fontSize: 14,
+    marginBottom: 8,
+    color: '#1B1A46',
+  },
+  bankLogoContainer: {
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+  },
+  bankName: {
+    marginLeft: 80,
+    marginTop: 4,
+    fontFamily: 'Heebo-Medium',
+    fontSize: 14,
+    color: '#1B1A46',
+  },
+  inputLabel: {
+    textAlign: 'left',
+    marginTop: 24,
+    marginBottom: 8,
+    fontFamily: 'Heebo-Medium',
+    fontSize: 14,
+    color: '#1B1A46',
+  },
+  accountNameText: {
+    textAlign: 'left',
+    fontFamily: 'Heebo-Regular',
+    fontSize: 14,
+    color: '#1B1A46',
+  },
+  amountSection: {
+    marginBottom: 16,
+  },
+  amountHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 8,
+  },
+  amountLabel: {
+    textAlign: 'left',
+    fontWeight: '500',
+    fontSize: 14,
+    color: '#1B1A46',
+  },
+  balanceText: {
+    textAlign: 'left',
+    fontFamily: 'Heebo-Medium',
+    fontSize: 14,
+    color: '#1B1A46',
+  },
+  amountInput: {
+    backgroundColor: '#DAE3FF',
+    borderWidth: 1,
+    borderColor: '#B2C7FF',
+    borderRadius: 4,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    marginBottom: 4,
+  },
+  limitText: {
+    color: '#EEA329',
+    fontSize: 12,
+  },
+})

@@ -31,7 +31,7 @@ export default function ServiceButton({
       }
     } else if (screenWidth < 420) {
       return {
-        width: 108,
+        width: 116,
         iconWidth: 15,
         iconHeight: 19,
         fontSize: 9.5,
