@@ -3,8 +3,9 @@ import { navigate } from '@divvi/mobile'
 import { RootStackScreenProps } from './types'
 import { View, StyleSheet, Text, FlatList, Pressable, Dimensions } from 'react-native'
 import SimpleDropdown from '../components/ui/SimpleDropdown'
-import { services } from '../constants'
+
 import tw from 'twrnc'
+import { services } from '../constants/constant'
 
 const { width: screenWidth } = Dimensions.get('window')
 

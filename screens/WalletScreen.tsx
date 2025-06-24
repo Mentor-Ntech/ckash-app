@@ -12,13 +12,15 @@ import { navigate } from '@divvi/mobile'
 import Card from '../components/ui/Card'
 import { useTokens } from '../utils'
 import SimpleDropdown from '../components/ui/SimpleDropdown'
-import { useBalanceVisibility } from '../hooks/useBalanceVisiblity'
+
 import HideBalance from '../assets/icons/hidebalance-Icon.svg'
 import IconButton from '../components/ui/IconButton'
 import tw from 'twrnc'
-import { services } from '../constants'
+
 import { calculateTotalUsdValue } from '../lib/cKash'
 import ServiceButton from '../components/ServiceButton'
+import { useBalanceVisibility } from '../hooks/useBalanceVisibility'
+import { services } from '../constants/constant'
 
 const Promotions = [
   {
