@@ -1,49 +1,26 @@
 import * as React from 'react'
 import {
   View,
-  StyleSheet,
-  TextInput,
   Text,
-  Alert,
+  TextInput,
   TouchableOpacity,
   ScrollView,
-  PermissionsAndroid,
-  Platform,
+  Alert,
+  StyleSheet,
 } from 'react-native'
 import { RootStackScreenProps } from '../../types'
-// import Card from "../../../components/ui/Card"
-// import Button from "../../../components/ui/Button"
 import NoteIcon from '../../../assets/icons/note-icon.svg'
-import {
-  //   usePublicClient,
-  //   useWallet,
-  useWalletClient,
-  //   unlockAccount,
-  //   navigate,
-  //   TransactionRequest,
-  //   prepareTransactions,
-  //   PreparedTransactionsNotEnoughBalanceForGas,
-  //   sendTransactions,
-  //   getFees,
-  //   usePrepareTransactions,
-} from '@divvi/mobile'
-// import { encodeFunctionData, erc20Abi, parseEther, parseUnits } from "viem"
-import { celo } from 'viem/chains'
+import { useWalletClient } from '@divvi/mobile'
 import { useTokens } from '../../../utils'
-// import { TokenBalance } from "src/tokens/slice"
-// import { Pretium_api } from "../../../constants/index"
 import ContactIcon from '../../../assets/icons/contact-icon.svg'
 import {
   calculateTotalUsdValue,
-  executeCKashTransaction,
-  getExchangeRate,
   getRatedAmount,
   getRatedAmountToLocalCurrency,
   sendTransactionStable,
 } from '../../../lib/cKash'
 import { PRETIUM_ADDRESS } from '../../../constants/constant'
 import { TokenBalance } from 'src/tokens/slice'
-import tw from 'twrnc'
 import ContactList from '../../../components/ContactList'
 import PrimaryButton from '../../../components/PrimaryButton'
 import InputField from '../../../components/InputField'
@@ -160,31 +137,25 @@ export default function BuyAirtime(
   }, [tokens])
 
   return (
-    <ScrollView
-      style={tw`flex-1 bg-[#F5F7FA] px-4`}
-      showsVerticalScrollIndicator={false}
-    >
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Amount Selection Card */}
-      <View
-        style={tw`bg-[#EFF3FF] border border-[#AEC5FF] rounded-lg p-6 mb-4`}
-      >
-        <Text style={tw`text-sm text-gray-700 font-medium mb-2`}>
-          Choose Amount (KES)
-        </Text>
-        <View style={tw`flex-row flex-wrap gap-2`}>
+      <View style={styles.amountCard}>
+        <Text style={styles.cardTitle}>Choose Amount (KES)</Text>
+        <View style={styles.amountOptionsGrid}>
           {amountOptions.map((option, index) => (
             <TouchableOpacity
               key={index}
               style={[
-                tw` rounded-lg p-4 w-[31%] border border-[#B2C7FF] rounded  mb-2 bg-[#DAE3FF]`,
-                selectedAmount === option.value && tw`bg-[#2B5CE6]`,
+                styles.amountOption,
+                selectedAmount === option.value && styles.amountOptionSelected,
               ]}
               onPress={() => handleAmountSelect(option.value)}
             >
               <Text
                 style={[
-                  tw`text-sm font-medium text-sm text-black`,
-                  selectedAmount === option.value && tw`text-white`,
+                  styles.amountOptionText,
+                  selectedAmount === option.value &&
+                    styles.amountOptionTextSelected,
                 ]}
               >
                 {option.label}
@@ -194,17 +165,13 @@ export default function BuyAirtime(
         </View>
 
         {/* Custom Amount Input */}
-        <View style={tw`mt-2`}>
-          <View style={tw`flex-row justify-between items-center mb-2`}>
-            <Text style={tw`text-sm ttext-gray-700 font-medium`}>
-              Input an Amount (KES)
-            </Text>
-            <Text style={tw`text-sm font-medium text-sm text-black`}>
-              KES {localBalance}
-            </Text>
+        <View style={styles.customAmountSection}>
+          <View style={styles.customAmountHeader}>
+            <Text style={styles.customAmountLabel}>Input an Amount (KES)</Text>
+            <Text style={styles.balanceText}>KES {localBalance}</Text>
           </View>
           <TextInput
-            style={tw`bg-white border border-[#B2C7FF] rounded px-4 py-4 mb-1 bg-[#DAE3FF]`}
+            style={styles.customAmountInput}
             value={customAmount}
             onChangeText={handleCustomAmountChange}
             placeholder="KES 100"
@@ -215,10 +182,8 @@ export default function BuyAirtime(
       </View>
 
       {/* Phone Number Input */}
-      <View style={tw` p-4 mb-4`}>
-        <Text style={tw`text-sm text-gray-700 font-medium mb-2`}>
-          Phone Number
-        </Text>
+      <View style={styles.phoneSection}>
+        <Text style={styles.phoneLabel}>Phone Number</Text>
         <InputField
           value={phoneNumber}
           onChangeText={handlePhoneChange}
@@ -229,11 +194,11 @@ export default function BuyAirtime(
           onIconPress={openContactPicker}
         />
         <TouchableOpacity
-          style={tw`flex-row items-center`}
+          style={styles.noteContainer}
           onPress={openContactPicker}
         >
-          <NoteIcon width={16} height={16} style={tw`mr-1`} />
-          <Text style={tw`text-[10px] text-gray-700 font-medium`}>
+          <NoteIcon width={16} height={16} style={styles.noteIcon} />
+          <Text style={styles.noteText}>
             All mobile networks are supported - Tap to select from contacts
           </Text>
         </TouchableOpacity>
@@ -259,3 +224,100 @@ export default function BuyAirtime(
     </ScrollView>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F5F7FA',
+    paddingHorizontal: 16,
+  },
+  amountCard: {
+    backgroundColor: '#EFF3FF',
+    borderWidth: 1,
+    borderColor: '#AEC5FF',
+    borderRadius: 8,
+    padding: 24,
+    marginBottom: 16,
+  },
+  cardTitle: {
+    fontSize: 14,
+    color: '#6B7280',
+    fontWeight: '500',
+    marginBottom: 8,
+  },
+  amountOptionsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  amountOption: {
+    borderRadius: 8,
+    padding: 16,
+    width: '31%',
+    borderWidth: 1,
+    borderColor: '#B2C7FF',
+    marginBottom: 8,
+    backgroundColor: '#DAE3FF',
+  },
+  amountOptionSelected: {
+    backgroundColor: '#2B5CE6',
+  },
+  amountOptionText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: 'black',
+  },
+  amountOptionTextSelected: {
+    color: 'white',
+  },
+  customAmountSection: {
+    marginTop: 8,
+  },
+  customAmountHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  customAmountLabel: {
+    fontSize: 14,
+    color: '#6B7280',
+    fontWeight: '500',
+  },
+  balanceText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: 'black',
+  },
+  customAmountInput: {
+    backgroundColor: '#DAE3FF',
+    borderWidth: 1,
+    borderColor: '#B2C7FF',
+    borderRadius: 4,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    marginBottom: 4,
+  },
+  phoneSection: {
+    padding: 16,
+    marginBottom: 16,
+  },
+  phoneLabel: {
+    fontSize: 14,
+    color: '#6B7280',
+    fontWeight: '500',
+    marginBottom: 8,
+  },
+  noteContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  noteIcon: {
+    marginRight: 4,
+  },
+  noteText: {
+    fontSize: 10,
+    color: '#6B7280',
+    fontWeight: '500',
+  },
+})

@@ -1,5 +1,4 @@
 import * as React from 'react'
-import tw from 'twrnc'
 import {
   View,
   TextInput,
@@ -7,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  StyleSheet,
 } from 'react-native'
 import { RootStackScreenProps } from '../../types'
 import { useSend } from '../../../hooks/useSend'
@@ -64,15 +64,15 @@ export default function UgandaSendMoney(
     };
 
   const {
-      openContactPicker,
-      closeContactPicker,
-      isModalVisible,
-      handleContactSelect,
-    } = useContactPicker({
-      onContactSelect: (formattedNumber: string) => {
-        setAccountNumber(formattedNumber)
-      },
-    })
+    openContactPicker,
+    closeContactPicker,
+    isModalVisible,
+    handleContactSelect,
+  } = useContactPicker({
+    onContactSelect: (formattedNumber: string) => {
+      setAccountNumber(formattedNumber)
+    },
+  })
 
   const fetchTokenAmount = React.useCallback(
     debounce(async (text: string) => {
@@ -110,10 +110,6 @@ export default function UgandaSendMoney(
 
   const handleAmountChange = (text: string) => {
     setAmount(text)
-    if (!text || isNaN(Number(text))) {
-      setTokenAmount('')
-      return
-    }
     fetchTokenAmount(text)
   }
 
@@ -190,37 +186,28 @@ export default function UgandaSendMoney(
   }, [tokens])
 
   return (
-    <ScrollView
-      style={tw`flex-1 bg-[#F5F7FA] px-4`}
-      showsVerticalScrollIndicator={false}
-    >
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Bank Selection Section */}
-      <View
-        style={tw`bg-[#EFF3FF] border border-[#AEC5FF] rounded-lg p-6 mb-4`}
-      >
-        <Text style={tw`text-left font-medium text-sm mb-2 text-[#1B1A46]`}>
-          Select Network
-        </Text>
-        <View style={tw`flex-row gap-3`}>
+      <View style={styles.bankSelectionCard}>
+        <Text style={styles.sectionTitle}>Select Network</Text>
+        <View style={styles.bankRow}>
           {banks.map((bank) => {
             const LogoComponent = bank.logo
             return (
               <TouchableOpacity
                 key={bank.id}
-                style={tw`bg-white rounded-lg py-3 px-4 items-center flex-1 border-2 ${
-                  selectedBank?.id === bank.id
-                    ? 'border-blue-600'
-                    : 'border-transparent'
-                }`}
+                style={[
+                  styles.bankButton,
+                  selectedBank?.id === bank.id && styles.bankButtonSelected,
+                ]}
                 onPress={() => handleBankSelect(bank)}
               >
-                <LogoComponent width={24} height={24} style={tw`mb-1`} />
+                <LogoComponent width={24} height={24} style={styles.bankLogo} />
                 <Text
-                  style={tw`text-xs font-semibold ${
-                    selectedBank?.id === bank.id
-                      ? 'text-blue-600'
-                      : 'text-gray-800'
-                  }`}
+                  style={[
+                    styles.bankText,
+                    selectedBank?.id === bank.id && styles.bankTextSelected,
+                  ]}
                 >
                   {bank.name}
                 </Text>
@@ -229,11 +216,7 @@ export default function UgandaSendMoney(
           })}
         </View>
 
-        <Text
-          style={tw`text-left mt-6 mb-2 font-medium text-sm text-[#1B1A46]`}
-        >
-          Account Number/Mobile Number
-        </Text>
+        <Text style={styles.inputLabel}>Account Number/Mobile Number</Text>
         <InputField
           value={accountNumber}
           onChangeText={handleAccountNumberChange}
@@ -245,47 +228,32 @@ export default function UgandaSendMoney(
         />
 
         {accountName && (
-          <Text style={tw`text-left mt-2 font-medium text-sm text-[#1B1A46]`}>
+          <Text style={styles.accountNameText}>
             Account name: {accountName}
           </Text>
         )}
       </View>
 
       {/* Amount Section */}
-      <View style={tw`mb-4`}>
-        <View style={tw`flex-row justify-between items-center my-2`}>
-          <Text style={tw`text-left font-medium text-sm text-[#1B1A46]`}>
-            Enter Amount (UGX)
-          </Text>
-          <Text style={tw`text-left font-medium text-sm text-[#1B1A46]`}>
-            UGX {localBalance.toLocaleString()}
-          </Text>
+      <View style={styles.amountSection}>
+        <View style={styles.amountHeader}>
+          <Text style={styles.amountLabel}>Enter Amount (UGX)</Text>
+          <Text style={styles.balanceText}>UGX {localBalance}</Text>
         </View>
         <TextInput
-          style={tw`bg-white border border-[#B2C7FF] rounded px-4 py-4 mb-1 bg-[#DAE3FF]`}
+          style={styles.amountInput}
           value={amount}
           onChangeText={handleAmountChange}
-          placeholder="UGX 1,000"
+          placeholder="UGX 10,000"
           placeholderTextColor="#A0A0A0"
           keyboardType="numeric"
         />
-        <Text style={tw`text-[#EEA329] text-xs`}>
-          (min: UGX500 max UGX5,000,000)
-        </Text>
+        <Text style={styles.limitText}>(min. 1,000 max 1,000,000)</Text>
       </View>
 
       {/* Continue Button */}
       {/* <PrimaryButton
         onPress={handleSendMoney}
-        disabled={!amount ||
-          isNaN(Number(amount)) ||
-          !accountNumber ||
-          !accountName ||
-          Number(amount) < 500 || 
-          !selectedBank?.name||
-          !tokenAmount ||
-          isNaN(Number(tokenAmount)) ||
-          Number(tokenAmount) <= 0}
         label="Continue"
         isLoading={loading}
       /> */}
@@ -314,10 +282,10 @@ export default function UgandaSendMoney(
 
 
       <ContactPickerModal
-              visible={isModalVisible}
-              onClose={closeContactPicker}
-              onContactSelect={handleContactSelect}
-            />
+        visible={isModalVisible}
+        onClose={closeContactPicker}
+        onContactSelect={handleContactSelect}
+      />
 
       
 
@@ -344,3 +312,103 @@ export default function UgandaSendMoney(
     </ScrollView>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F5F7FA',
+    paddingHorizontal: 16,
+  },
+  bankSelectionCard: {
+    backgroundColor: '#EFF3FF',
+    borderWidth: 1,
+    borderColor: '#AEC5FF',
+    borderRadius: 8,
+    padding: 24,
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    textAlign: 'left',
+    fontWeight: '500',
+    fontSize: 14,
+    marginBottom: 8,
+    color: '#1B1A46',
+  },
+  bankRow: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  bankButton: {
+    backgroundColor: 'white',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    flex: 1,
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
+  bankButtonSelected: {
+    borderColor: '#2563EB',
+  },
+  bankLogo: {
+    marginBottom: 4,
+  },
+  bankText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#374151',
+  },
+  bankTextSelected: {
+    color: '#2563EB',
+  },
+  inputLabel: {
+    textAlign: 'left',
+    marginTop: 24,
+    marginBottom: 8,
+    fontWeight: '500',
+    fontSize: 14,
+    color: '#1B1A46',
+  },
+  accountNameText: {
+    textAlign: 'left',
+    marginTop: 8,
+    fontWeight: '500',
+    fontSize: 14,
+    color: '#1B1A46',
+  },
+  amountSection: {
+    marginBottom: 16,
+  },
+  amountHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 8,
+  },
+  amountLabel: {
+    textAlign: 'left',
+    fontWeight: '500',
+    fontSize: 14,
+    color: '#1B1A46',
+  },
+  balanceText: {
+    textAlign: 'left',
+    fontWeight: '500',
+    fontSize: 14,
+    color: '#1B1A46',
+  },
+  amountInput: {
+    backgroundColor: '#DAE3FF',
+    borderWidth: 1,
+    borderColor: '#B2C7FF',
+    borderRadius: 4,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    marginBottom: 4,
+  },
+  limitText: {
+    color: '#EEA329',
+    fontSize: 12,
+  },
+})

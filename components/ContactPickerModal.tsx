@@ -16,7 +16,6 @@ import { PERMISSIONS, request, RESULTS } from 'react-native-permissions'
 import BackIcon from '../assets/icons/back-icon.svg'
 import SearchIcon from '../assets/icons/search.svg'
 
-
 interface Contact {
   id: string
   name: string
