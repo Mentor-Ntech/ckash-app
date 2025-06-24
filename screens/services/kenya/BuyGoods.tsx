@@ -21,6 +21,7 @@ import ListIcon from '../../../assets/icons/list-icon.svg'
 import NoteIcon from '../../../assets/icons/note-icon.svg'
 import PrimaryButton from '../../../components/PrimaryButton'
 import InputField from '../../../components/InputField'
+import { TokenSelectorRef, TokenSelectorSheet } from '../../../components/TokenSelectorSheet'
 
 export default function MPESABuyGoods(
   _props: RootStackScreenProps<'KenyaBuyGoods'>,
@@ -30,10 +31,21 @@ export default function MPESABuyGoods(
   const [tokenAmount, setTokenAmount] = React.useState<string>('')
   const [modalVisible, setModalVisible] = React.useState(false)
   const [localBalance, setLocalBalance] = React.useState<number>(0.0)
+
   
   const { data: walletClient } = useWalletClient({ networkId: 'celo-mainnet' })
   const { sendMoney, loading,isError } = useSend()
-  const { cUSDToken,tokens } = useTokens()
+  const { cUSDToken, tokens } = useTokens()
+  
+  const [selectedToken, setSelectedToken] = React.useState<TokenBalance | null>(null)
+      const [openBottom,setOpenBottom]= React.useState<boolean>(true)
+    const tokenSheetRef = React.useRef<TokenSelectorRef>(null)
+    
+  
+    const openSheet = () => {
+      tokenSheetRef.current?.open() 
+      setOpenBottom(false)
+    };
 
   const fetchTokenAmount = React.useCallback(
     debounce(async (text: string) => {
@@ -76,10 +88,10 @@ export default function MPESABuyGoods(
         rawAmount: amount,
         type: 'BUY_GOODS',
         mobileNetwork: 'Safaricom',
-        tokenBalance: cUSDToken as TokenBalance,
+        tokenBalance: selectedToken as TokenBalance,
         from: walletClient?.account?.address as `0x${string}`,
-        to: cUSDToken?.address as `0x${string}`,
-        feeCurrency: cUSDToken?.address as `0x${string}`,
+        to: selectedToken?.address as `0x${string}`,
+        feeCurrency: selectedToken?.address as `0x${string}`,
       })
       console.log('THE RESPONSE', response)
       setModalVisible(true)
@@ -152,14 +164,33 @@ export default function MPESABuyGoods(
         </View>
 
         {/* Continue Button */}
-        <PrimaryButton onPress={handleBuyGoods}
+        {/* <PrimaryButton onPress={handleBuyGoods}
           disabled={!amount ||
             isNaN(Number(amount)) ||
             Number(amount) < 20 || 
             !tokenAmount ||
             isNaN(Number(tokenAmount)) ||
             Number(tokenAmount) <= 0}
-          label="Continue" isLoading={loading} />
+          label="Continue" isLoading={loading} /> */}
+        
+        {openBottom?<PrimaryButton onPress={openSheet}
+                              disabled={!amount ||
+                                isNaN(Number(amount)) ||
+                                Number(amount) < 20 || 
+                                !tillNumber.trim()                                
+                                
+                                }
+                              label="Continue" isLoading={loading} />:<PrimaryButton onPress={handleBuyGoods}
+                              disabled={!amount ||
+                                isNaN(Number(amount)) ||                      
+                               
+                                Number(amount) < 20 ||                 
+                                !selectedToken||
+                                !tokenAmount ||
+                                !tillNumber.trim() ||                               
+                                isNaN(Number(tokenAmount)) ||
+                                Number(tokenAmount) <= 0}
+                              label="Send" isLoading={loading} />}
 
         {/* Disclaimer */}
         <View style={tw`flex-row items-center`}>
@@ -169,6 +200,12 @@ export default function MPESABuyGoods(
           </Text>
         </View>
       </View>
+<TokenSelectorSheet
+              ref={tokenSheetRef}
+              tokens={tokens}
+              onSelect={(token) => setSelectedToken(token)}
+            />
+
       <AlertModal
         visible={modalVisible}
         onClose={() => {

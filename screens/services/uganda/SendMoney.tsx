@@ -30,6 +30,7 @@ import ContactListIcon from '../../../assets/icons/list-icon.svg'
 import { TokenBalance } from '@divvi/mobile/src/tokens/slice'
 import { useContactPicker } from '../../../hooks/useContactPicker'
 import { ContactPickerModal } from '../../../components/ContactPickerModal'
+import { TokenSelectorRef, TokenSelectorSheet } from '../../../components/TokenSelectorSheet'
 
 interface Bank {
   id: string
@@ -50,6 +51,17 @@ export default function UgandaSendMoney(
   const { sendMoney, loading, isError } = useSend()
   const { tokens, cUSDToken } = useTokens()
   const [modalVisible, setModalVisible] = React.useState(false)
+
+    
+  const [selectedToken, setSelectedToken] = React.useState<TokenBalance | null>(null)
+      const [openBottom,setOpenBottom]= React.useState<boolean>(true)
+    const tokenSheetRef = React.useRef<TokenSelectorRef>(null)
+    
+  
+    const openSheet = () => {
+      tokenSheetRef.current?.open() 
+      setOpenBottom(false)
+    };
 
   const {
       openContactPicker,
@@ -135,10 +147,10 @@ export default function UgandaSendMoney(
         country_code: 'UGX',
         type: 'MOBILE',
         mobileNetwork: selectedBank?.name as MobileNetwork,
-        tokenBalance: cUSDToken as TokenBalance,
+        tokenBalance: selectedToken as TokenBalance,
         from: walletClient?.account?.address as `0x${string}`,
-        to: cUSDToken?.address as `0x${string}`,
-        feeCurrency: cUSDToken?.address as `0x${string}`,
+        to: selectedToken?.address as `0x${string}`,
+        feeCurrency: selectedToken?.address as `0x${string}`,
       })
       console.log('THE RESPONSE', response)
       setModalVisible(true)
@@ -263,7 +275,7 @@ export default function UgandaSendMoney(
       </View>
 
       {/* Continue Button */}
-      <PrimaryButton
+      {/* <PrimaryButton
         onPress={handleSendMoney}
         disabled={!amount ||
           isNaN(Number(amount)) ||
@@ -276,13 +288,47 @@ export default function UgandaSendMoney(
           Number(tokenAmount) <= 0}
         label="Continue"
         isLoading={loading}
-      />
+      /> */}
+
+      {openBottom?<PrimaryButton onPress={openSheet}
+                    disabled={!amount ||
+                      isNaN(Number(amount)) ||
+                      !accountNumber ||
+                      !accountName ||
+                      Number(amount) < 500 || 
+                      !selectedBank?.name                      
+                      }
+                    label="Continue" isLoading={loading} />:<PrimaryButton onPress={handleSendMoney}
+                    disabled={!amount ||
+                      isNaN(Number(amount)) ||
+                      !accountNumber ||
+                      !accountName ||
+                      Number(amount) < 500 || 
+                      !selectedBank?.name  ||                
+                      !selectedToken||
+                      !tokenAmount ||
+                      isNaN(Number(tokenAmount)) ||
+                      Number(tokenAmount) <= 0}
+        label="Send" isLoading={loading} />}
+      
+
+
       <ContactPickerModal
               visible={isModalVisible}
               onClose={closeContactPicker}
               onContactSelect={handleContactSelect}
             />
 
+      
+
+
+      <TokenSelectorSheet
+              ref={tokenSheetRef}
+              tokens={tokens}
+              onSelect={(token) => setSelectedToken(token)}
+      />
+      
+      
       <AlertModal
         visible={modalVisible}
         onClose={() => {

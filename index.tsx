@@ -203,7 +203,11 @@ const App = createApp({
         />
         <Screen
           name="KenyaBuyGoods"
-          component={BuyGoods}
+          component={(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"KenyaBuyGoods">) => (
+            <BottomSheetModalProvider>
+              <BuyGoods {...props} />
+            </BottomSheetModalProvider>
+          )}
           options={{
             headerBackVisible: true,
             headerShown: true,
@@ -212,7 +216,11 @@ const App = createApp({
         />
         <Screen
           name="KenyaPayBills"
-          component={PayBills}
+          component={(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"KenyaPayBills">) => (
+            <BottomSheetModalProvider>
+              <PayBills {...props} />
+            </BottomSheetModalProvider>
+          )}
           options={{
             headerBackVisible: true,
             headerShown: true,

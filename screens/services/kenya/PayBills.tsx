@@ -21,6 +21,7 @@ import ListIcon from '../../../assets/icons/list-icon.svg'
 import tw from 'twrnc'
 import PrimaryButton from '../../../components/PrimaryButton'
 import InputField from '../../../components/InputField'
+import { TokenSelectorRef, TokenSelectorSheet } from '../../../components/TokenSelectorSheet'
 
 export default function MPESAPaybills(
   _props: RootStackScreenProps<'KenyaPayBills'>,
@@ -34,7 +35,18 @@ export default function MPESAPaybills(
   const [localBalance, setLocalBalance] = React.useState<number>(0.0)
   
   const { sendMoney, loading,isError } = useSend()
-  const { cUSDToken,tokens } = useTokens()
+  const { cUSDToken, tokens } = useTokens()
+  
+const [selectedToken, setSelectedToken] = React.useState<TokenBalance | null>(null)
+    const [openBottom,setOpenBottom]= React.useState<boolean>(true)
+  const tokenSheetRef = React.useRef<TokenSelectorRef>(null)
+  
+
+  const openSheet = () => {
+    tokenSheetRef.current?.open() 
+    setOpenBottom(false)
+  };
+
   const fetchTokenAmount = React.useCallback(
     debounce(async (text: string) => {
       const numericValue = parseFloat(text)
@@ -86,10 +98,10 @@ export default function MPESAPaybills(
         account_number: accountNumber,
         type: 'PAYBILL',
         mobileNetwork: 'Safaricom',
-        tokenBalance: cUSDToken as TokenBalance,
+        tokenBalance: selectedToken as TokenBalance,
         from: walletClient?.account?.address as `0x${string}`,
-        to: cUSDToken?.address as `0x${string}`,
-        feeCurrency: cUSDToken?.address as `0x${string}`,
+        to: selectedToken?.address as `0x${string}`,
+        feeCurrency: selectedToken?.address as `0x${string}`,
       })
       console.log('THE RESPONSE', response)
       setModalVisible(true)
@@ -176,14 +188,35 @@ export default function MPESAPaybills(
         </View>
 
         {/* Continue Button */}
-        <PrimaryButton onPress={handleSendMoney}
+        {/* <PrimaryButton onPress={handleSendMoney}
           disabled={!amount ||
             isNaN(Number(amount)) ||
             Number(amount) < 20 || 
             !tokenAmount ||
             isNaN(Number(tokenAmount)) ||
             Number(tokenAmount) <= 0}
-          label="Continue" isLoading={loading} />
+          label="Continue" isLoading={loading} /> */}
+        
+        {openBottom?<PrimaryButton onPress={openSheet}
+                      disabled={!amount ||
+                        isNaN(Number(amount)) ||
+                        Number(amount) < 20 || 
+                        !paybillNumber.trim() ||
+                        !accountNumber.trim()
+                        
+                        }
+                      label="Continue" isLoading={loading} />:<PrimaryButton onPress={handleSendMoney}
+                      disabled={!amount ||
+                        isNaN(Number(amount)) ||                      
+                       
+                        Number(amount) < 20 ||                 
+                        !selectedToken||
+                        !tokenAmount ||
+                        !paybillNumber.trim() ||
+                        !accountNumber.trim()||
+                        isNaN(Number(tokenAmount)) ||
+                        Number(tokenAmount) <= 0}
+                      label="Send" isLoading={loading} />}
 
         {/* Disclaimer */}
         <View style={tw`flex-row items-center`}>
@@ -193,6 +226,13 @@ export default function MPESAPaybills(
           </Text>
         </View>
       </View>
+
+<TokenSelectorSheet
+              ref={tokenSheetRef}
+              tokens={tokens}
+              onSelect={(token) => setSelectedToken(token)}
+            />
+
       <AlertModal
         visible={modalVisible}
         onClose={() => {
