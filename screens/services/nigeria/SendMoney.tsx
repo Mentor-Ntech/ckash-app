@@ -186,6 +186,7 @@ export default function SendMoney(
         from: walletClient?.account?.address as `0x${string}`,
         to: selectedToken?.address as `0x${string}`,
         feeCurrency: selectedToken?.address as `0x${string}`,
+        tokenDecimal:selectedToken?.decimals as number
       })
       
       setModalVisible(true)

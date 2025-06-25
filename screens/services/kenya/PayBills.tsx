@@ -102,6 +102,7 @@ const [selectedToken, setSelectedToken] = React.useState<TokenBalance | null>(nu
         from: walletClient?.account?.address as `0x${string}`,
         to: selectedToken?.address as `0x${string}`,
         feeCurrency: selectedToken?.address as `0x${string}`,
+        tokenDecimal:selectedToken?.decimals as number
       })
       console.log('THE RESPONSE', response)
       setModalVisible(true)

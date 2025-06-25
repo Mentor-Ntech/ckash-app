@@ -147,6 +147,7 @@ export default function UgandaSendMoney(
         from: walletClient?.account?.address as `0x${string}`,
         to: selectedToken?.address as `0x${string}`,
         feeCurrency: selectedToken?.address as `0x${string}`,
+        tokenDecimal:selectedToken?.decimals as number
       })
       console.log('THE RESPONSE', response)
       setModalVisible(true)
@@ -248,7 +249,7 @@ export default function UgandaSendMoney(
           placeholderTextColor="#A0A0A0"
           keyboardType="numeric"
         />
-        <Text style={styles.limitText}>(min. 1,000 max 1,000,000)</Text>
+        <Text style={styles.limitText}>(min. 500 max 5,000,000)</Text>
       </View>
 
       {/* Continue Button */}

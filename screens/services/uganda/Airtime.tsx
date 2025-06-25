@@ -113,6 +113,7 @@ export default function Airtime(_props: RootStackScreenProps<'UgandaAirtime'>) {
           from: walletClient?.account?.address as `0x${string}`,
           to: cUSDToken?.address as `0x${string}`,
           feeCurrency: cUSDToken?.address as `0x${string}`,
+          tokenDecimal:cUSDToken?.decimals as number
 
         })
         console.log('THE RESPONSE', response)

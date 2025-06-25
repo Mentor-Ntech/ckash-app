@@ -83,6 +83,7 @@ export const sendTransactionStable = async (send: SendTransactionProp) => {
       throw new Error('canceled unlock')
     }
   } catch (error) {
+    console.log("The Error SENDING 2",error)
     throw new Error('Failed to send')
   }
 }

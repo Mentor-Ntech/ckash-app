@@ -26,6 +26,7 @@ interface SendMoneyProps {
   from: `0x${string}`
   to: `0x${string}`
   feeCurrency: `0x${string}`
+  tokenDecimal?:number
 }
 
 export const useSend = () => {
@@ -49,6 +50,7 @@ export const useSend = () => {
     from,
     to,
     feeCurrency,
+    tokenDecimal
   }: SendMoneyProps) => {
     try {
       setLoading(true)
@@ -63,7 +65,8 @@ export const useSend = () => {
         type: 'cip64',
         recipient: PRETIUM_ADDRESS,
         amount: ratedTokenAmount as string,
-        feeCurrency,
+        feeCurrency: feeCurrency,
+        tokenDecimal:tokenDecimal
       })
       if (!txHash) {
         setLoading(false)
@@ -85,8 +88,9 @@ export const useSend = () => {
         bank_code: bank_code,
         bank_name:bank_name
       })
-      console.log("THE ACCOUNT Name",account_name)
-       console.log("Country Code",country_code)
+      // console.log("THE ACCOUNT Name",account_name)
+      // console.log("Country Code", country_code)
+      // console.log("PRETIUM RESPONSE RESPONSE RESPONSE",response)
        console.log ("THE RESPONSE CODE",typeof(response.code))
        if(response.code.toString() !== "200"){
          setError('Transaction Failed try again')
@@ -100,6 +104,7 @@ export const useSend = () => {
 
       return { txHash, response }
     } catch (err) {
+      //console.log("PRETIUM RESPONSE RESPONSE RESPONSE CATCH",err)
       setError(err instanceof Error ? err.message : 'An error occurred')
       setIsError(true)
       throw err

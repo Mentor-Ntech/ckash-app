@@ -17,6 +17,7 @@ export const useSendTransactionStable = () => {
       setTxHash(result as string);
       return result;
     } catch (err: any) {
+      //console.log("The Error SENDING",err)
       const message = err?.message || 'Failed to send transaction';
       setError(message);
       Alert.alert('Transaction Error', message);
