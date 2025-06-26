@@ -20,6 +20,7 @@ import {
   getRatedAmount,
   getRatedAmountToLocalCurrency,
   validateAccount,
+  getCurrencyRate 
 } from '../../../lib/cKash'
 import { useSend } from '../../../hooks/useSend'
 import { ContactPickerModal } from '../../../components/ContactPickerModal'
@@ -48,6 +49,7 @@ export default function SendMoney(
   const [tokenAmount, setTokenAmount] = React.useState<string>('')
   const { sendMoney, loading, isError } = useSend()
   const [localBalance, setLocalBalance] = React.useState<number>(0.0)
+  const [localCurrencyRate, setlocalCurrencyRate] = React.useState<number>(0.0)
 
   const { tokens, cUSDToken } = useTokens()
   const [modalVisible, setModalVisible] = React.useState(false)
@@ -156,9 +158,16 @@ export default function SendMoney(
     setAmount('')
     setTokenAmount('')
     setAccountName(null)
+    setSelectedToken(null)
+    setOpenBottom(true)
   }
 
+  
+
   React.useEffect(() => {
+    getCurrencyRate("KES").then((value) =>
+    setlocalCurrencyRate(value))
+
     if (!tokens || tokens.length === 0) return
     let totalUsdValue = calculateTotalUsdValue(tokens)
     getRatedAmountToLocalCurrency(Number(totalUsdValue), 'KES').then((value) =>
@@ -206,7 +215,7 @@ export default function SendMoney(
           placeholderTextColor="#A0A0A0"
           keyboardType="numeric"
         />
-        <Text style={styles.limitText}>(min. 20 max 250,000)</Text>
+        <Text style={styles.limitText}>(min: 20 , max 250,000)</Text>
       </View>
 
       
@@ -238,7 +247,8 @@ export default function SendMoney(
 
            <TokenSelectorSheet
               ref={tokenSheetRef}
-              tokens={tokens}
+        tokens={tokens}
+        usdRate={{country:"KES",amount:localCurrencyRate}}
               onSelect={(token) => setSelectedToken(token)}
             />
 

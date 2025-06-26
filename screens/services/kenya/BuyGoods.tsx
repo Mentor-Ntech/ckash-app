@@ -13,7 +13,7 @@ import { RootStackScreenProps } from '../../types'
 import { useSend } from '../../../hooks/useSend'
 import { useTokens } from '../../../utils'
 import { useWalletClient } from '@divvi/mobile'
-import { calculateTotalUsdValue, getRatedAmount, getRatedAmountToLocalCurrency } from '../../../lib/cKash'
+import { calculateTotalUsdValue, getCurrencyRate, getRatedAmount, getRatedAmountToLocalCurrency } from '../../../lib/cKash'
 import debounce from 'lodash.debounce'
 import { TokenBalance } from 'src/tokens/slice'
 import AlertModal from '../../../components/AlertModal'
@@ -31,6 +31,7 @@ export default function MPESABuyGoods(
   const [tokenAmount, setTokenAmount] = React.useState<string>('')
   const [modalVisible, setModalVisible] = React.useState(false)
   const [localBalance, setLocalBalance] = React.useState<number>(0.0)
+  const [localCurrencyRate, setlocalCurrencyRate] = React.useState<number>(0.0)
 
   
   const { data: walletClient } = useWalletClient({ networkId: 'celo-mainnet' })
@@ -74,6 +75,8 @@ export default function MPESABuyGoods(
     setTillNumber('')
     setAmount('')
     setTokenAmount('')
+    setSelectedToken(null)
+    setOpenBottom(true)
   }
 
   const handleBuyGoods = async () => {
@@ -101,7 +104,9 @@ export default function MPESABuyGoods(
       Alert.alert(`${error}`)
     }
   }
- React.useEffect(() => {
+  React.useEffect(() => {
+    getCurrencyRate("KES").then((value) =>
+       setlocalCurrencyRate(value))
       if (!tokens || tokens.length === 0) return
       let totalUsdValue = calculateTotalUsdValue(tokens)
       getRatedAmountToLocalCurrency(Number(totalUsdValue), 'KES').then((value) =>
@@ -160,7 +165,7 @@ export default function MPESABuyGoods(
             />
           </View>
           <Text style={tw`text-xs text-[#EEA329] font-medium`}>
-            (min: 20 max 250,000)
+            (min: 20 , max 250,000)
           </Text>
         </View>
 
@@ -202,7 +207,8 @@ export default function MPESABuyGoods(
         </View>
       </View>
 <TokenSelectorSheet
-              ref={tokenSheetRef}
+        ref={tokenSheetRef}
+        usdRate={{country:"KES",amount:localCurrencyRate}}
               tokens={tokens}
               onSelect={(token) => setSelectedToken(token)}
             />

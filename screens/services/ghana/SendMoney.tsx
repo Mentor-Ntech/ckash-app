@@ -18,6 +18,7 @@ import {
   getRatedAmountToLocalCurrency,
   calculateTotalUsdValue,
   validateAccount,
+  getCurrencyRate,
 } from '../../../lib/cKash'
 import debounce from 'lodash.debounce'
 import { TokenBalance } from 'src/tokens/slice'
@@ -51,6 +52,7 @@ export default function GhanaSendMoney(
 
   const [tokenAmount, setTokenAmount] = React.useState<string>('')
   const [localBalance, setLocalBalance] = React.useState<number>(0.0)
+  const [localCurrencyRate, setlocalCurrencyRate] = React.useState<number>(0.0)
 
 
 
@@ -137,6 +139,8 @@ export default function GhanaSendMoney(
   }, [accountNumber, selectedBank])
 
   React.useEffect(() => {
+     getCurrencyRate("GHS").then((value) =>
+        setlocalCurrencyRate(value))
     if (!tokens || tokens.length === 0) return
     let totalUsdValue = calculateTotalUsdValue(tokens)
     getRatedAmountToLocalCurrency(Number(totalUsdValue), 'GHS').then((value) =>
@@ -158,6 +162,8 @@ export default function GhanaSendMoney(
     setAmount('')
     setTokenAmount('')
     setAccountName(null)
+    setSelectedToken(null)
+    setOpenBottom(true)
   }
 
   const handleSendMoney = async () => {
@@ -310,7 +316,8 @@ export default function GhanaSendMoney(
       />
 
       <TokenSelectorSheet
-                    ref={tokenSheetRef}
+        ref={tokenSheetRef}
+        usdRate={{country:"GHS",amount:localCurrencyRate}}
                     tokens={tokens}
                     onSelect={(token) => setSelectedToken(token)}
             />

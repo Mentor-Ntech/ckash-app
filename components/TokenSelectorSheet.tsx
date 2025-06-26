@@ -20,14 +20,20 @@ import { CustomBottomSheet } from './BottomSheet'
   export interface TokenSelectorRef {
     open: () => void
   }
+
+export type rate = {
+  country: string,
+  amount:number,
+  }
   
   interface Props {
     tokens: TokenBalance[]
-    onSelect: (token: TokenBalance) => void
+    onSelect: (token: TokenBalance) => void,
+    usdRate?:rate
   }
   
   export const TokenSelectorSheet = forwardRef<TokenSelectorRef, Props>(
-    ({ tokens, onSelect }, ref) => {
+    ({ tokens, onSelect,usdRate }, ref) => {
       const bottomSheetRef = useRef<BottomSheetModal>(null)
   
      
@@ -45,8 +51,8 @@ import { CustomBottomSheet } from './BottomSheet'
       return (
         <CustomBottomSheet
           forwardedRef={bottomSheetRef}
-          title="Send Crypto"
-          description="Choose a token to send"
+          title="Select Token"
+          currencyRate={usdRate as rate}
           
           onClose={() => {}}
         >

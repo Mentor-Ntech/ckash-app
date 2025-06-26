@@ -8,7 +8,7 @@ import {
   Linking,
 } from 'react-native'
 import { RootStackScreenProps } from './types'
-import { navigate } from '@divvi/mobile'
+import { navigate,useWallet } from '@divvi/mobile'
 import Card from '../components/ui/Card'
 import { useTokens } from '../utils'
 import SimpleDropdown from '../components/ui/SimpleDropdown'
@@ -47,6 +47,7 @@ export default function WalletScreen(
   const [selectedCountry, setSelectedCountry] = React.useState('Kenya')
   const [currentIndex, setCurrentIndex] = React.useState(0)
   
+  
   // Use the custom hook for balance visibility
   const { 
     balanceHidden, 
@@ -64,7 +65,8 @@ export default function WalletScreen(
     { label: '🇳🇬 Nigeria', value: 'Nigeria' },
   ])
 
-  const { tokens, cKESToken, cUSDToken } = useTokens()
+  const {  cKESToken, cUSDToken } = useTokens()
+  const { tokens } = useWallet()
   const currentPromo = Promotions[currentIndex]
 
   function onPressHoldUSD() {
@@ -98,6 +100,7 @@ export default function WalletScreen(
   React.useEffect(() => {
     if (!tokens || tokens.length === 0) return
     setUsdBalance(calculateTotalUsdValue(tokens))
+   
   }, [tokens])
 
   return (

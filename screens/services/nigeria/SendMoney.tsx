@@ -22,6 +22,7 @@ import {
   getRatedAmountToLocalCurrency,
   calculateTotalUsdValue,
   validateAccount,
+  getCurrencyRate,
 } from '../../../lib/cKash'
 import debounce from 'lodash.debounce'
 import { TokenBalance } from 'src/tokens/slice'
@@ -63,6 +64,7 @@ export default function SendMoney(
   const { data: walletClient } = useWalletClient({ networkId: 'celo-mainnet' })
   const [tokenAmount, setTokenAmount] = React.useState<string>('')
   const [localBalance, setLocalBalance] = React.useState<number>(0.0)
+  const [localCurrencyRate, setlocalCurrencyRate] = React.useState<number>(0.0)
    
   const [selectedToken, setSelectedToken] = React.useState<TokenBalance | null>(null)
   const [openBottom,setOpenBottom]= React.useState<boolean>(true)
@@ -125,6 +127,8 @@ export default function SendMoney(
     setTokenAmount('')
     setSelectedBank(null)
     setAccountName(null)
+    setSelectedToken(null)
+    setOpenBottom(true)
   }
 
   const account_name = async (account_number: string) => {
@@ -151,6 +155,8 @@ export default function SendMoney(
   }, [accountNumber, selectedBank])
 
   React.useEffect(() => {
+     getCurrencyRate("NGN").then((value) =>
+        setlocalCurrencyRate(value))
     if (!tokens || tokens.length === 0) return
     let totalUsdValue = calculateTotalUsdValue(tokens)
     getRatedAmountToLocalCurrency(Number(totalUsdValue), 'NGN').then((value) =>
@@ -276,7 +282,7 @@ export default function SendMoney(
           placeholderTextColor="#A0A0A0"
           keyboardType="numeric"
         />
-        <Text style={tw`text-[#EEA329] text-xs`}>(min: ₦100 max ₦1,000,000)</Text>
+        <Text style={tw`text-[#EEA329] text-xs`}>(min: ₦100 , max ₦1,000,000)</Text>
       </View>
 
       {/* Continue Button */}
@@ -306,6 +312,7 @@ export default function SendMoney(
 
      <TokenSelectorSheet
         ref={tokenSheetRef}
+        usdRate={{country:"NGN",amount:localCurrencyRate}}
         tokens={tokens}
         onSelect={(token) => setSelectedToken(token)}
       />

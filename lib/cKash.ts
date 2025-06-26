@@ -212,6 +212,14 @@ export const getRatedAmount = async (
   return calculatedAmount
 }
 
+export const getCurrencyRate = async ( 
+  currencyCode: CurrencyCode,
+) => {
+  const rate = await getExchangeRate(currencyCode)
+  const calculatedAmount =  parseFloat(rate?.buying_rate.toString())
+  return calculatedAmount
+}
+
 export const getRatedAmountToLocalCurrency = async (
   amount: number,
   currencyCode: CurrencyCode,

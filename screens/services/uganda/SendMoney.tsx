@@ -18,6 +18,7 @@ import {
   getRatedAmountToLocalCurrency,
   calculateTotalUsdValue,
   validateAccount,
+  getCurrencyRate,
 } from '../../../lib/cKash'
 import debounce from 'lodash.debounce'
 import AlertModal from '../../../components/AlertModal'
@@ -48,6 +49,7 @@ export default function UgandaSendMoney(
   const { data: walletClient } = useWalletClient({ networkId: 'celo-mainnet' })
   const [tokenAmount, setTokenAmount] = React.useState<string>('')
   const [localBalance, setLocalBalance] = React.useState<number>(0.0)
+  const [localCurrencyRate, setlocalCurrencyRate] = React.useState<number>(0.0)
   const { sendMoney, loading, isError } = useSend()
   const { tokens, cUSDToken } = useTokens()
   const [modalVisible, setModalVisible] = React.useState(false)
@@ -118,6 +120,8 @@ export default function UgandaSendMoney(
     setAmount('')
     setTokenAmount('')
     setAccountName(null)
+    setSelectedToken(null)
+    setOpenBottom(true)
   }
 
   const handleSendMoney = async () => {
@@ -171,6 +175,8 @@ export default function UgandaSendMoney(
   }
 
   React.useEffect(() => {
+     getCurrencyRate("UGX").then((value) =>
+        setlocalCurrencyRate(value))
     if (accountNumber.length >= 10 && selectedBank) {
       account_name(accountNumber)
     } else {
@@ -249,7 +255,7 @@ export default function UgandaSendMoney(
           placeholderTextColor="#A0A0A0"
           keyboardType="numeric"
         />
-        <Text style={styles.limitText}>(min. 500 max 5,000,000)</Text>
+        <Text style={styles.limitText}>(min: 500 , max 5,000,000)</Text>
       </View>
 
       {/* Continue Button */}
@@ -293,7 +299,8 @@ export default function UgandaSendMoney(
 
       <TokenSelectorSheet
               ref={tokenSheetRef}
-              tokens={tokens}
+        tokens={tokens}
+        usdRate={{country:"UGX",amount:localCurrencyRate}}
               onSelect={(token) => setSelectedToken(token)}
       />
       

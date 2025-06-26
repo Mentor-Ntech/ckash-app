@@ -12,7 +12,7 @@ import { RootStackScreenProps } from '../../types'
 import { useSend } from '../../../hooks/useSend'
 import { useTokens } from '../../../utils'
 import { useWalletClient } from '@divvi/mobile'
-import { calculateTotalUsdValue, getRatedAmount, getRatedAmountToLocalCurrency } from '../../../lib/cKash'
+import { calculateTotalUsdValue, getCurrencyRate, getRatedAmount, getRatedAmountToLocalCurrency } from '../../../lib/cKash'
 import debounce from 'lodash.debounce'
 import { TokenBalance } from 'src/tokens/slice'
 import AlertModal from '../../../components/AlertModal'
@@ -33,6 +33,7 @@ export default function MPESAPaybills(
   const { data: walletClient } = useWalletClient({ networkId: 'celo-mainnet' })
   const [tokenAmount, setTokenAmount] = React.useState<string>('')
   const [localBalance, setLocalBalance] = React.useState<number>(0.0)
+  const [localCurrencyRate, setlocalCurrencyRate] = React.useState<number>(0.0)
   
   const { sendMoney, loading,isError } = useSend()
   const { cUSDToken, tokens } = useTokens()
@@ -79,6 +80,8 @@ const [selectedToken, setSelectedToken] = React.useState<TokenBalance | null>(nu
     setAmount('')
     setTokenAmount('')
     setPaybillNumber('')
+    setSelectedToken(null)
+    setOpenBottom(true)
   }
   const handleSendMoney = async () => {
     try {
@@ -113,6 +116,8 @@ const [selectedToken, setSelectedToken] = React.useState<TokenBalance | null>(nu
   }
 
   React.useEffect(() => {
+    getCurrencyRate("KES").then((value) =>
+        setlocalCurrencyRate(value))
       if (!tokens || tokens.length === 0) return
       let totalUsdValue = calculateTotalUsdValue(tokens)
       getRatedAmountToLocalCurrency(Number(totalUsdValue), 'KES').then((value) =>
@@ -184,7 +189,7 @@ const [selectedToken, setSelectedToken] = React.useState<TokenBalance | null>(nu
             />
           </View>
           <Text style={tw`text-xs text-[#EEA329] font-medium`}>
-            (min: 20 max 250,000)
+            (min: 20 , max 250,000)
           </Text>
         </View>
 
@@ -230,7 +235,8 @@ const [selectedToken, setSelectedToken] = React.useState<TokenBalance | null>(nu
 
 <TokenSelectorSheet
               ref={tokenSheetRef}
-              tokens={tokens}
+        tokens={tokens}
+        usdRate={{country:"KES",amount:localCurrencyRate}}
               onSelect={(token) => setSelectedToken(token)}
             />
 
