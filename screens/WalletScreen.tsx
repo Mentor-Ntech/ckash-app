@@ -110,7 +110,7 @@ export default function WalletScreen(
       >
         <View style={tw`flex-5 pt-1 w-[100%] justify-center items-center`}>
           <Card
-            style={tw` flex-1 bg-[#0034BB] rounded-lg w-[90%] h-[95%] gap-4 my-4 mx-2.5 justify-between z-10 `}
+            style={tw` flex-1 bg-[#0034BB] rounded-lg w-[90%] h-[95%] gap-4 my-1.5 mx-2.5 justify-between z-10 `}
           >
             {/* Wallet Title */}
             <View style={tw`flex-row items-center gap-2`}>
@@ -155,7 +155,7 @@ export default function WalletScreen(
                   items={dropdownItems}
                   selectedValue={selectedCountry}
                   onSelect={handleCountrySelect}
-                  dropdownStyle="h-6 w-22 border-transparent bg-[#8DADFE] ml-11 rounded-[2px] flex-row items-center justify-between px-2"
+                  dropdownStyle="h-6 w-22 border-transparent bg-[#8DADFE] ml-8 rounded-[2px] flex-row items-center justify-between px-2"
                   textStyle="text-xs text-black flex-1 font-normal"
                   dropdownListStyle="bg-[#8DADFE] rounded-md rounded-[2px] border border-[#7A96FE]"
                   itemStyle="px-2 py-2.5 border-b border-[#7A96FE]/30"
