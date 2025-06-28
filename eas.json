@@ -13,8 +13,8 @@
     "preview": {
       "distribution": "internal",
       "env": {
-        "API_KEY": "niISiP9gF9cpgk9z",
-        "BASE_URL": "https://api.xwift.africa/"
+        "API_KEY": "API_KEY",
+        "BASE_URL": "BASE_URL"
       }
     },
     "production": {
