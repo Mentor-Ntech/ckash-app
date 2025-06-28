@@ -104,7 +104,7 @@ export const useSend = () => {
 
       return { txHash, response }
     } catch (err) {
-      //console.log("PRETIUM RESPONSE RESPONSE RESPONSE CATCH",err)
+      console.log("PRETIUM RESPONSE RESPONSE RESPONSE CATCH",err)
       setError(err instanceof Error ? err.message : 'An error occurred')
       setIsError(true)
       throw err
