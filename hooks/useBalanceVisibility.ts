@@ -1,23 +1,35 @@
 import { useState } from 'react'
+import { useSettings } from './useSettings'
+import { useSettingsStore } from '../store/settingStore'
 
 export const useBalanceVisibility = (initialState: boolean = false) => {
   const [balanceHidden, setBalanceHidden] = useState<boolean>(initialState)
+  //const { hideBalance, toggleHideBalance } = useSettings()
+  const {
+    country,
+    hideBalance,
+    setCountry,
+    toggleHideBalance,
+    setHideBalance,
+    reset,
+  } = useSettingsStore();
 
   const toggleBalanceVisibility = () => {
-    setBalanceHidden(prev => !prev)
+    // setBalanceHidden(prev => !prev)
+    toggleHideBalance()
   }
 
   const formatBalance = (balance: number | string, decimals: number = 4): string => {
-    return balanceHidden ? '****' : Number(balance).toFixed(decimals)
+    return hideBalance ? '****' : Number(balance).toFixed(decimals)
   }
 
   const formatUsdValue = (balance: number, price: number): string => {
     const value = Number(balance) * Number(price)
-    return balanceHidden ? '****' : `$${value.toFixed(4)}`
+    return hideBalance ? '****' : `$${value.toFixed(4)}`
   }
 
   const formatWalletBalance = (balance: number): string => {
-    return balanceHidden ? '*****' : balance.toString()
+    return hideBalance ? '*****' : balance.toString()
   }
 
   return {

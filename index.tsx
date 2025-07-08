@@ -38,6 +38,8 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { RootStackScreenProps } from './screens/types'
 
 
+
+
 const expoConfig = Constants.expoConfig
 if (!expoConfig) {
   throw new Error('expoConfig is not available')
@@ -118,59 +120,65 @@ const App = createApp({
     custom: (Screen) => (
       <>
         <Screen
-          name="KenyaSendMoney"
-          component={(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"KenyaSendMoney">) => (
+          name="KenyaSendMoney"          
+          options={{
+            headerBackVisible: true,
+            headerShown: true,
+            headerTitle: 'Send Money',
+          }}
+        >
+          {(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"KenyaSendMoney">) => (
             <BottomSheetModalProvider>
               <KenyaSendMoney {...props} />
             </BottomSheetModalProvider>
           )}
+          </Screen>
+        <Screen
+          name="UgandaSendMoney"          
           options={{
             headerBackVisible: true,
             headerShown: true,
             headerTitle: 'Send Money',
           }}
-        />
-        <Screen
-          name="UgandaSendMoney"
-          component={(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"UgandaSendMoney">) => (
+        >
+          {(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"UgandaSendMoney">) => (
             <BottomSheetModalProvider>
               <UgandaSendMoney {...props} />
             </BottomSheetModalProvider>
           )}
-          options={{
-            headerBackVisible: true,
-            headerShown: true,
-            headerTitle: 'Send Money',
-          }}
-        />
+          </Screen>
         <Screen
           name="NigeriaSendMoney"
-          component={(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"NigeriaSendMoney">) => (
-            <BottomSheetModalProvider>
-              <NigeriaSendMoney {...props} />
-            </BottomSheetModalProvider>
-          )}
+          
     
           options={{
             headerBackVisible: true,
             headerShown: true,
             headerTitle: 'Send Money',
           }}
-        />
+        >
+          {(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"NigeriaSendMoney">) => (
+            <BottomSheetModalProvider>
+              <NigeriaSendMoney {...props} />
+            </BottomSheetModalProvider>
+          )}
+          </Screen>
 
         <Screen
           name="GhanaSendMoney"
-          component={(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"GhanaSendMoney">) => (
-            <BottomSheetModalProvider>
-              <GhanaSendMoney {...props} />
-            </BottomSheetModalProvider>
-          )}
+          
           options={{
             headerBackVisible: true,
             headerShown: true,
             headerTitle: 'Send Money',
           }}
-        />
+        >
+          {(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"GhanaSendMoney">) => (
+            <BottomSheetModalProvider>
+              <GhanaSendMoney {...props} />
+            </BottomSheetModalProvider>
+          )}
+          </Screen>
 
         <Screen
           name="NigeriaAirtime"
@@ -203,30 +211,34 @@ const App = createApp({
         />
         <Screen
           name="KenyaBuyGoods"
-          component={(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"KenyaBuyGoods">) => (
-            <BottomSheetModalProvider>
-              <BuyGoods {...props} />
-            </BottomSheetModalProvider>
-          )}
+          
           options={{
             headerBackVisible: true,
             headerShown: true,
             headerTitle: 'Buy Goods',
           }}
-        />
-        <Screen
-          name="KenyaPayBills"
-          component={(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"KenyaPayBills">) => (
+        >
+          {(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"KenyaBuyGoods">) => (
             <BottomSheetModalProvider>
-              <PayBills {...props} />
+              <BuyGoods {...props} />
             </BottomSheetModalProvider>
           )}
-          options={{
-            headerBackVisible: true,
-            headerShown: true,
-            headerTitle: 'Pay Bills',
-          }}
-        />
+          </Screen>
+
+        <Screen
+  name="KenyaPayBills"
+  options={{
+    headerBackVisible: true,
+    headerShown: true,
+    headerTitle: 'Pay Bills',
+  }}
+>
+  {(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"KenyaPayBills">) => (
+    <BottomSheetModalProvider>
+      <PayBills {...props} />
+    </BottomSheetModalProvider>
+  )}
+</Screen>
       </>
       
     ),
@@ -278,13 +290,15 @@ const App = createApp({
   },
 })
 
-function AppWrapper() {
-  return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <BottomSheetModalProvider>
-        <App />
-      </BottomSheetModalProvider>
-    </GestureHandlerRootView>
+
+function AppWrapper() {  
+  return (    
+    <GestureHandlerRootView style={{ flex: 1 }}>      
+        <BottomSheetModalProvider>       
+          <App />
+        </BottomSheetModalProvider>      
+      </GestureHandlerRootView>
+      
   );
 }
 

@@ -7,10 +7,18 @@ import SimpleDropdown from '../components/ui/SimpleDropdown'
 import tw from 'twrnc'
 import { services } from '../constants/constant'
 
+import { useSettingsStore } from '../store/settingStore'
+
 const { width: screenWidth } = Dimensions.get('window')
 
 export default function ServiceScreen(_props: RootStackScreenProps<'Service'>) {
   const [selectedCountry, setSelectedCountry] = React.useState('Kenya')
+   const {
+      country,
+     
+      setCountry,
+      
+    } = useSettingsStore();
   // Dropdown state
   const [dropdownItems] = React.useState([
     { label: '🇰🇪 Kenya', value: 'Kenya' },
@@ -20,7 +28,8 @@ export default function ServiceScreen(_props: RootStackScreenProps<'Service'>) {
   ])
 
   const handleCountrySelect = (value: string) => {
-    setSelectedCountry(value)
+    //setSelectedCountry(value)
+    setCountry(value)
   }
 
   // Calculate card width based on screen size
@@ -47,7 +56,7 @@ export default function ServiceScreen(_props: RootStackScreenProps<'Service'>) {
         >
           <SimpleDropdown
             items={dropdownItems}
-            selectedValue={selectedCountry}
+            selectedValue={country}
             onSelect={handleCountrySelect}
             dropdownStyle="h-6 w-22 border-transparent bg-[#8DADFE] ml-14 rounded-[2px] flex-row items-center justify-between px-2"
             textStyle="text-xs text-black flex-1 font-normal"
@@ -64,7 +73,7 @@ export default function ServiceScreen(_props: RootStackScreenProps<'Service'>) {
       {/**Services */}
       <View style={styles.services}>
         <FlatList
-          data={services[selectedCountry]}
+          data={services[country]}
           keyExtractor={(index) => index.toString()}
           style={{ width: '100%' }}
           showsHorizontalScrollIndicator={false}

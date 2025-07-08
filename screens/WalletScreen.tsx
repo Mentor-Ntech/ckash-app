@@ -21,6 +21,8 @@ import { calculateTotalUsdValue } from '../lib/cKash'
 import ServiceButton from '../components/ServiceButton'
 import { useBalanceVisibility } from '../hooks/useBalanceVisibility'
 import { services } from '../constants/constant'
+import { useSettingsStore } from '../store/settingStore'
+
 
 const Promotions = [
   {
@@ -46,9 +48,16 @@ export default function WalletScreen(
   const [usdBalance, setUsdBalance] = React.useState<number>(0.0)
   const [selectedCountry, setSelectedCountry] = React.useState('Kenya')
   const [currentIndex, setCurrentIndex] = React.useState(0)
+
+ const {
+       country,
+      
+       setCountry,
+       
+     } = useSettingsStore();
   
   
-  // Use the custom hook for balance visibility
+  
   const { 
     balanceHidden, 
     toggleBalanceVisibility, 
@@ -94,7 +103,8 @@ export default function WalletScreen(
   }, [])
 
   const handleCountrySelect = (value: string) => {
-    setSelectedCountry(value)
+    //setSelectedCountry(value)
+    setCountry(value)
   }
 
   React.useEffect(() => {
@@ -153,7 +163,7 @@ export default function WalletScreen(
               >
                 <SimpleDropdown
                   items={dropdownItems}
-                  selectedValue={selectedCountry}
+                  selectedValue={country}
                   onSelect={handleCountrySelect}
                   dropdownStyle="h-6 w-22 border-transparent bg-[#8DADFE] ml-8 rounded-[2px] flex-row items-center justify-between px-2"
                   textStyle="text-xs text-black flex-1 font-normal"
@@ -216,7 +226,7 @@ export default function WalletScreen(
               Quick Utilities
             </Text>
             <View style={tw`flex-row flex-wrap gap-2.5`}>
-              {(services?.[selectedCountry] || []).map((item) => (
+              {(services?.[country] || []).map((item) => (
                 <ServiceButton
                   key={item.name}
                   name={item.name}
