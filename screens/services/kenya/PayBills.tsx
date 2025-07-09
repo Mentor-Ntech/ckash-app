@@ -100,6 +100,7 @@ const [selectedToken, setSelectedToken] = React.useState<TokenBalance | null>(nu
         rawAmount: amount,
         account_number: accountNumber,
         type: 'PAYBILL',
+        country_code_refund:"KES",
         mobileNetwork: 'Safaricom',
         tokenBalance: selectedToken as TokenBalance,
         from: walletClient?.account?.address as `0x${string}`,

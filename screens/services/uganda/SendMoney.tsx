@@ -146,6 +146,7 @@ export default function UgandaSendMoney(
         rawAmount: amount,
         country_code: 'UGX',
         type: 'MOBILE',
+        country_code_refund:"UGX",
         mobileNetwork: selectedBank?.name as MobileNetwork,
         tokenBalance: selectedToken as TokenBalance,
         from: walletClient?.account?.address as `0x${string}`,

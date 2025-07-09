@@ -90,6 +90,7 @@ export default function MPESABuyGoods(
         ratedTokenAmount: tokenAmount,
         rawAmount: amount,
         type: 'BUY_GOODS',
+        country_code_refund:"KES",
         mobileNetwork: 'Safaricom',
         tokenBalance: selectedToken as TokenBalance,
         from: walletClient?.account?.address as `0x${string}`,

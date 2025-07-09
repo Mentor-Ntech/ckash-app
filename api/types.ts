@@ -15,6 +15,10 @@ export type MAKEPAYMENT ={
     
 }
 
+export type REFUND = {
+  transaction_code: string,
+  country_code?:CountryCodes
+}
 export type ACCOUNTVALIDATION = {
     type?: string,
     shortcode?: string,

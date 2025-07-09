@@ -15,7 +15,8 @@ interface SendMoneyProps {
   shortcode?: string
   rawAmount?: string
   account_number?:string
-  country_code?:CountryCodes
+  country_code?: CountryCodes
+  country_code_refund?:CountryCodes
   type?:PaymentType
   account_name?: string
   bank_name?: string
@@ -33,7 +34,7 @@ export const useSend = () => {
   const [loading, setLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const { sendStableToken } = useSendTransactionStable()
+  const { sendStableToken,error:txError } = useSendTransactionStable()
 
   const sendMoney = async ({
      shortcode,
@@ -41,6 +42,7 @@ export const useSend = () => {
     rawAmount,
     account_number,
     country_code,
+    country_code_refund,
     ratedTokenAmount,
     bank_code,
     bank_name,
@@ -68,10 +70,19 @@ export const useSend = () => {
         feeCurrency: feeCurrency,
         tokenDecimal:tokenDecimal
       })
+      if (txError) {
+        setIsError(true);
+        setError(txError || 'Transaction error occurred');
+        setLoading(false);
+        return { txHash: null, response: null };
+      }
+  
+      
       if (!txHash) {
-        setLoading(false)
-        setIsError(true)
-        throw new Error('Transaction failed')
+        setIsError(true);
+        setError('Transaction failed');
+        setLoading(false);
+        return { txHash: null, response: null };
       }
       
 
@@ -91,7 +102,10 @@ export const useSend = () => {
       // console.log("THE ACCOUNT Name",account_name)
       // console.log("Country Code", country_code)
       // console.log("PRETIUM RESPONSE RESPONSE RESPONSE",response)
-       console.log ("THE RESPONSE CODE",typeof(response.code))
+      // console.log("THE RESPONSE CODE", response.data?.transaction_code)
+      const dt = await new Promise(resolve => setTimeout(async () => resolve(await Pretium_api.refund({ transaction_code: response.data?.transaction_code, country_code: country_code_refund })), 6000));
+
+      //console.log("THE REFUND",dt)
        if(response.code.toString() !== "200"){
          setError('Transaction Failed try again')
          setIsError(true)

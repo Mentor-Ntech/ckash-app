@@ -118,6 +118,7 @@ export default function SendMoney(
         rawAmount: amount,
         type: 'MOBILE',
         mobileNetwork: 'Safaricom',
+        country_code_refund:"KES",
         tokenBalance: selectedToken as TokenBalance,
         from: walletClient?.account?.address as `0x${string}`,
         to: selectedToken?.address as `0x${string}`,

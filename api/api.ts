@@ -1,4 +1,4 @@
-import { ACCOUNTVALIDATION, MAKEPAYMENT } from './types'
+import { ACCOUNTVALIDATION, MAKEPAYMENT, REFUND } from './types'
 
 class Pretium {
   api_key: string
@@ -13,7 +13,7 @@ class Pretium {
     const requestHeaders: HeadersInit = new Headers()
     requestHeaders.set('Content-Type', 'application/json')
     requestHeaders.set('x-api-key', this.api_key)
-    console.log('THE REQUEST HEADERS', requestHeaders)
+    //console.log('THE REQUEST HEADERS', requestHeaders)
     return requestHeaders
   }
 
@@ -59,8 +59,8 @@ class Pretium {
       const data = await response.json()
       return data
     } catch (error) {
-      console.error('Error validating account:', error)
-      console.log('THE ERROR IS', error)
+      //console.error('Error validating account:', error)
+     // console.log('THE ERROR IS', error)
       //throw error;
     }
   }
@@ -102,6 +102,25 @@ class Pretium {
     } catch (error) {
       console.log('ERROR making payment')
     }
+  }
+  //refund
+  refund = async (refund: REFUND) => {
+    const payload: REFUND = {
+      transaction_code: refund.transaction_code
+      
+    }
+    console.log("THE REFUND IS",refund)
+    const requestOptions = {
+      method: 'POST' as const,
+      headers: this.getHeaders(),
+      body: JSON.stringify(payload),
+    }
+    const url = `${this.baseURL}v1/refund/${refund.country_code}`
+    const response = await fetch(url, requestOptions)
+    const data = await response.json()
+    return data
+    
+    
   }
 
   //banks

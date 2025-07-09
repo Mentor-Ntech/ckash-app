@@ -184,6 +184,7 @@ export default function SendMoney(
         ratedTokenAmount: tokenAmount,
         rawAmount: amount,
         country_code: 'NGN',
+        country_code_refund:"NGN",
         account_number: accountNumber,
         bank_code: bankcode,
         bank_name: selectedBank.name,

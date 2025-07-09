@@ -187,6 +187,7 @@ export default function GhanaSendMoney(
         ratedTokenAmount: tokenAmount,
         rawAmount: amount,
         country_code: 'GHS',
+        country_code_refund:"GHS",
         type: 'MOBILE',
         mobileNetwork: selectedBank?.name as MobileNetwork,
         tokenBalance: selectedToken as TokenBalance,
