@@ -2,7 +2,7 @@
   "name": "cKash",
   "slug": "ckash",
   "scheme": "ckash",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "orientation": "portrait",
   "icon": "./assets/icon.png",
   "userInterfaceStyle": "light",
@@ -23,6 +23,7 @@
     }
   },
   "android": {
+    "versionCode": 3, 
     "adaptiveIcon": {
       "foregroundImage": "./assets/adaptive-icon.png",
       "backgroundColor": "#000d5a"
@@ -94,8 +95,8 @@
   ],
   "extra": {
     "eas": {
-      "projectId": "93e7c3c1-e5a5-4f61-af07-9c91f471c34d"
+      "projectId": "7c7d628d-341e-4bf5-8295-af09ddb714fb"
     }
   },
-  "owner": "lemonr"
+  "owner": "ckashapp"
 }
