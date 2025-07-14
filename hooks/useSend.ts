@@ -103,7 +103,7 @@ export const useSend = () => {
       // console.log("Country Code", country_code)
       // console.log("PRETIUM RESPONSE RESPONSE RESPONSE",response)
       // console.log("THE RESPONSE CODE", response.data?.transaction_code)
-      const dt = await new Promise(resolve => setTimeout(async () => resolve(await Pretium_api.refund({ transaction_code: response.data?.transaction_code, country_code: country_code_refund })), 6000));
+      //const dt = await new Promise(resolve => setTimeout(async () => resolve(await Pretium_api.refund({ transaction_code: response.data?.transaction_code, country_code: country_code_refund })), 6000));
 
       //console.log("THE REFUND",dt)
        if(response.code.toString() !== "200"){

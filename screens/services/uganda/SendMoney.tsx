@@ -157,8 +157,9 @@ export default function UgandaSendMoney(
       console.log('THE RESPONSE', response)
       setModalVisible(true)
     } catch (error) {
-      console.log('THE ERROR', error)
-      Alert.alert(`${error}`)
+      // console.log('THE ERROR', error)
+      // Alert.alert(`${error}`)
+      setModalVisible(true);
     }
   }
 

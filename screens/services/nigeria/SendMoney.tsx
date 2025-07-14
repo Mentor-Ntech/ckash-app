@@ -199,7 +199,8 @@ export default function SendMoney(
       setModalVisible(true)
     } catch (error) {
      
-      Alert.alert('Error', `Transaction failed: ${error}`)
+      //Alert.alert('Error', `Transaction failed: ${error}`)
+      setModalVisible(true);
     }
   }
 

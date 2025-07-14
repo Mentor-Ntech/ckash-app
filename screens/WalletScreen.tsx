@@ -6,9 +6,10 @@ import {
   Image,
   TouchableOpacity,
   Linking,
+  RefreshControl
 } from 'react-native'
 import { RootStackScreenProps } from './types'
-import { navigate,useWallet } from '@divvi/mobile'
+import { navigate,useWallet, } from '@divvi/mobile'
 import Card from '../components/ui/Card'
 import { useTokens } from '../utils'
 import SimpleDropdown from '../components/ui/SimpleDropdown'
@@ -48,6 +49,8 @@ export default function WalletScreen(
   const [usdBalance, setUsdBalance] = React.useState<number>(0.0)
   const [selectedCountry, setSelectedCountry] = React.useState('Kenya')
   const [currentIndex, setCurrentIndex] = React.useState(0)
+  const [refreshing, setRefreshing] = React.useState(false)
+  const [triggerRefresh, setTriggerRefresh] = React.useState(0);
 
  const {
        country,
@@ -101,6 +104,23 @@ export default function WalletScreen(
 
     return () => clearInterval(interval)
   }, [])
+
+  
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true); 
+    try {
+      console.log('Attempting to refresh tokens via pull-to-refresh...');
+      setTriggerRefresh(prev => prev + 1);
+  
+      
+      await new Promise(resolve => setTimeout(resolve, 500)); 
+    } catch (error) {
+      // console.error('Error during pull-to-refresh:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  }, []);
 
   const handleCountrySelect = (value: string) => {
     //setSelectedCountry(value)
@@ -271,6 +291,9 @@ export default function WalletScreen(
             data={tokens}
             keyExtractor={(item) => item.tokenId}
             contentContainerStyle={tw`pb-4`}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
             renderItem={({ item }) => (
               <View
                 style={tw`flex-row items-center bg-white rounded-lg py-1 mb-2 overflow-y-hidden`}

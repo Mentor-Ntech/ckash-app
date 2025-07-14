@@ -111,8 +111,7 @@ const [selectedToken, setSelectedToken] = React.useState<TokenBalance | null>(nu
       console.log('THE RESPONSE', response)
       setModalVisible(true)
     } catch (error) {
-      console.log('THE ERROR', error)
-      Alert.alert(`${error}`)
+      setModalVisible(true);
     }
   }
 
