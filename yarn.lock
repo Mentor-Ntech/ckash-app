@@ -987,13 +987,14 @@
   dependencies:
     invariant "^2.2.4"
 
-"@divvi/mobile@^1.0.0-alpha.78":
-  version "1.0.0-alpha.78"
-  resolved "https://registry.yarnpkg.com/@divvi/mobile/-/mobile-1.0.0-alpha.78.tgz#f83cd4e48bc813f545462b723602c5976be68583"
-  integrity sha512-tiDn6Jrvf6KnLeAdOvopJ/cvYkwbKU1wLkliVt11LjNwMbwwDrjaJH3cL6jRsGsN6ogbOaiyjad5w5+GOhev9A==
+"@divvi/mobile@^1.0.0-alpha.87":
+  version "1.0.0-alpha.87"
+  resolved "https://registry.yarnpkg.com/@divvi/mobile/-/mobile-1.0.0-alpha.87.tgz#a234765f9ad6de70da6bad019328ccafd59c8c5c"
+  integrity sha512-n51IZwFhOhHuF+SKPm/L3rDzYC82YKtrUDuZilcR9ZK1bsw3D/U9QNb2XDwC03psd7WYjeC1je6giuPOFSkmqQ==
   dependencies:
     "@badrap/result" "~0.2.13"
     "@crowdin/ota-client" "^2.0.1"
+    "@divvi/referral-sdk" "^2.2.0"
     "@fiatconnect/fiatconnect-sdk" "^0.5.74"
     "@fiatconnect/fiatconnect-types" "^13.3.11"
     "@gorhom/bottom-sheet" "^5.1.1"
@@ -1003,7 +1004,6 @@
     "@reduxjs/toolkit" "^2.5.1"
     "@reown/walletkit" "^1.2.1"
     "@scure/bip39" "^1.5.4"
-    "@sentry/react-native" "^5.36.0"
     "@toruslabs/constants" "^14.2.0"
     "@toruslabs/fetch-node-details" "^14.2.0"
     "@toruslabs/torus.js" "^15.1.1"
@@ -1048,7 +1048,6 @@
     redux-saga "^1.3.0"
     reselect "^4.1.8"
     seedrandom "^3.0.5"
-    statsig-react-native "^4.15.0"
     svgs "^4.2.0"
     tslib "^2.8.1"
     typed-redux-saga "^1.5.0"
@@ -1069,6 +1068,11 @@
   version "9.2.2"
   resolved "https://registry.yarnpkg.com/@divvi/react-native-keychain/-/react-native-keychain-9.2.2.tgz#9379a89f4199e70b39eafdc60a2fd81037a65e25"
   integrity sha512-akPEW3R1e9eSyo0O2aoPf+vEpVx3KJ/s6GTQO/4tCTYEQZsaBZiCSc7FnS+HEO7xAWX6Zq66pnqYdywT0nBT3w==
+
+"@divvi/referral-sdk@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@divvi/referral-sdk/-/referral-sdk-2.2.0.tgz#e624ad17e8e0355db6053300569b937f7f9b6ff3"
+  integrity sha512-C02v8YY+H6TunWz1lUGU04pJzaOrnjVbe12Gv/iFo1C9NNE1+o5oVR/xGuxfXqsPJ1tVlvS0s+5kqQEDAl8Blg==
 
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
@@ -5747,6 +5751,13 @@ expo-build-properties@~0.13.0:
     ajv "^8.11.0"
     semver "^7.6.0"
 
+expo-camera@~16.0.18:
+  version "16.0.18"
+  resolved "https://registry.yarnpkg.com/expo-camera/-/expo-camera-16.0.18.tgz#5b54dc1a929c12732c585b137b04cef2b01dee3b"
+  integrity sha512-NP5u2yyc+wZc9GdUXH+jcEytyXZwBnHxItMwXoZQQxi4wgltwvs4XfSWjBtRZe1LngnhpBfPyPJV0aShjWlLDg==
+  dependencies:
+    invariant "^2.2.4"
+
 expo-constants@~17.0.4, expo-constants@~17.0.5:
   version "17.0.5"
   resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-17.0.5.tgz#b5deb4a4242cd6ef1f6c68e745664f69d41a0ffb"
@@ -5795,7 +5806,7 @@ expo-file-system@~18.0.7:
   dependencies:
     web-streams-polyfill "^3.3.2"
 
-expo-font@^13.0.4, expo-font@~13.0.3:
+expo-font@~13.0.3, expo-font@~13.0.4:
   version "13.0.4"
   resolved "https://registry.yarnpkg.com/expo-font/-/expo-font-13.0.4.tgz#c60771446598ddfa98ac1d25244c916a089a99c9"
   integrity sha512-eAP5hyBgC8gafFtprsz0HMaB795qZfgJWqTmU0NfbSin1wUuVySFMEPMOrTkTgmazU73v4Cb4x7p86jY1XXYUw==
@@ -6940,11 +6951,6 @@ js-base64@^3.7.5:
   version "3.7.7"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-3.7.7.tgz#e51b84bf78fbf5702b9541e2cb7bfcb893b43e79"
   integrity sha512-7rCnleh0z2CkXhH67J8K1Ytz0b2Y+yxTPL+/KOJoa20hfnVQ/3/T6W/KflYI4bRHRagNeXeU2bkNGI3v1oS/lw==
-
-js-sha256@^0.11.0:
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/js-sha256/-/js-sha256-0.11.0.tgz#256a921d9292f7fe98905face82e367abaca9576"
-  integrity sha512-6xNlKayMZvds9h1Y1VWc0fQHQ82BxTXizWPEtEeGvmOUYpBRy4gbWroHLpzowe6xiQhHpelCQiE7HEdznyBL9Q==
 
 js-sha3@0.8.0:
   version "0.8.0"
@@ -8545,6 +8551,11 @@ react-native-animatable@1.3.3:
   dependencies:
     prop-types "^15.7.2"
 
+react-native-app-control@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-app-control/-/react-native-app-control-1.0.2.tgz#40f9e5a76cc56b44536d8e1cd6da4d9d0c5b248e"
+  integrity sha512-894KjiVLRG3+tlz93B/+LfAYcRv7ZSrObMMYFaE66rMRq/1H7EUyKH6Gf6631bACBDmN81KKK04rsnFP/lzIFQ==
+
 react-native-auth0@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/react-native-auth0/-/react-native-auth0-3.2.1.tgz#db73181980e374a50cbdd3f73edd8961b638d18e"
@@ -8555,13 +8566,6 @@ react-native-auth0@^3.2.1:
     prettier-quick "^0.0.5"
     prop-types "^15.8.1"
     url "^0.11.0"
-
-react-native-camera@^4.2.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/react-native-camera/-/react-native-camera-4.2.1.tgz#caf74081f055e89d7e9b0cd5108965d808c60e90"
-  integrity sha512-+Vkql24PFYQfsPRznJCvPwJQfyzCnjlcww/iZ4Ej80bgivKjL9eU0IMQIXp4yi6XCrKi4voWXxIDPMupQZKeIQ==
-  dependencies:
-    prop-types "^15.6.2"
 
 react-native-config@^1.5.3:
   version "1.5.3"
@@ -8588,11 +8592,6 @@ react-native-dropdown-picker@^5.4.6:
   version "5.4.6"
   resolved "https://registry.yarnpkg.com/react-native-dropdown-picker/-/react-native-dropdown-picker-5.4.6.tgz#3736fc468de4a295e4df8d1f65ed2eadaf9b445f"
   integrity sha512-T1XBHbE++M6aRU3wFYw3MvcOuabhWZ29RK/Ivdls2r1ZkZ62iEBZknLUPeVLMX3x6iUxj4Zgr3X2DGlEGXeHsA==
-
-react-native-exit-app@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-exit-app/-/react-native-exit-app-2.0.0.tgz#21d523580f0c1bf6793bc4e6d5771ba9347cd8e4"
-  integrity sha512-vr9e/8jgPcKCBw6qo0QLxfeMiTwExydghbYDqpLZYAGWR+6cbgnhvOxwdYj/JWR7ZtOALrRA4GMGSvU/ayxM7w==
 
 react-native-fast-image@^8.6.3:
   version "8.6.3"
@@ -9514,28 +9513,6 @@ stacktrace-parser@^0.1.10:
   integrity sha512-KJP1OCML99+8fhOHxwwzyWrlUuVX5GQ0ZpJTd1DFXhdkrvg1szxfHhawXUZ3g9TkXORQd4/WG68jMlQZ2p8wlg==
   dependencies:
     type-fest "^0.7.1"
-
-statsig-js@4.51.0:
-  version "4.51.0"
-  resolved "https://registry.yarnpkg.com/statsig-js/-/statsig-js-4.51.0.tgz#3b7b26ecd81a59961d621734e9b7db60487f837d"
-  integrity sha512-EbCWfrDHwqntUA1zK4nlnjLMBV+5OAHaZCqmjiw2vOFFp0YTLNNj205lkhP3hbyfNEyPldzJ+ooYwLSifHvAMA==
-  dependencies:
-    js-sha256 "^0.11.0"
-    uuid "^8.3.2"
-
-statsig-react-native@^4.15.0:
-  version "4.15.0"
-  resolved "https://registry.yarnpkg.com/statsig-react-native/-/statsig-react-native-4.15.0.tgz#b9281c049b65c92659de809f1b7cde3345c65351"
-  integrity sha512-XvPAkfX9B18B8AVt3PWDW4BgNGjKpR0aCRZavAWvSVY9nJLBPNnG1Ms43c5dG61ORNjvMliCSpifZ+ADeGo9bw==
-  dependencies:
-    statsig-react "^1.36.0"
-
-statsig-react@^1.36.0:
-  version "1.38.1"
-  resolved "https://registry.yarnpkg.com/statsig-react/-/statsig-react-1.38.1.tgz#2700d80d467f001a28747cea13c8ee94b44f4d90"
-  integrity sha512-8tqYk8ucCJxcqMuH+gqkDRywFHUDQOSgkbAlVoBtupNlwuRxMak+BgGX0LeqwNaF0DnFYwyJlr0Z4R2uxqysQQ==
-  dependencies:
-    statsig-js "4.51.0"
 
 statuses@2.0.1:
   version "2.0.1"

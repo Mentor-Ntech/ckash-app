@@ -53,8 +53,7 @@ const App = createApp({
       : expoConfig.scheme
     : 'example',
   divviProtocol: {
-    protocolIds: ['celo'],
-    referrerId: 'cKash',
+     divviId :"0x8767667767676767676"
   },
   features: {
     cloudBackup: true,

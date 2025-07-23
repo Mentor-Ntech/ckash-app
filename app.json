@@ -23,7 +23,7 @@
     }
   },
   "android": {
-    "versionCode": 3, 
+    "versionCode": 3,
     "adaptiveIcon": {
       "foregroundImage": "./assets/adaptive-icon.png",
       "backgroundColor": "#000d5a"
@@ -56,6 +56,12 @@
         "android": {
           "extraMavenRepos": ["https://sdk.withpersona.com/android/releases"]
         }
+      }
+    ],
+    [
+      "expo-camera",
+      {
+        "recordAudioAndroid": false
       }
     ],
     [
