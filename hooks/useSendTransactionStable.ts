@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert } from 'react-native';
+//import { Alert } from 'react-native';
 import { SendTransactionProp, sendTransactionStable } from '../lib/cKash';
 
 

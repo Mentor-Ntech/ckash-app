@@ -181,7 +181,8 @@ export default function GhanaSendMoney(
         Alert.alert('Please Select Mobile Network')
         return
       }
-      const { response } = await sendMoney({
+      // const { response } =
+        await sendMoney({
         shortcode: accountNumber,
         account_name: accountName,
         ratedTokenAmount: tokenAmount,
@@ -196,7 +197,7 @@ export default function GhanaSendMoney(
         feeCurrency: selectedToken?.feeCurrencyAdapterAddress?selectedToken?.feeCurrencyAdapterAddress:selectedToken?.address as `0x${string}`,
         tokenDecimal:selectedToken?.decimals as number
       })
-      console.log('THE RESPONSE', response)
+      // console.log('THE RESPONSE', response)
       setModalVisible(true)
     } catch (error) {
       setModalVisible(true);

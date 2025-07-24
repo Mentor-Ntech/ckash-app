@@ -1,14 +1,18 @@
 import {
   encodeFunctionData,
   erc20Abi,
+  Hex,
   parseEther,
   parseUnits,
   TransactionRequestEIP1559,
 } from 'viem'
+// import { TransactionRequest } from '@divvi/mobile/src/viem/prepareTransactions'
+import { PreparedTransactionsPossible } from '@divvi/mobile'
 import { celo } from 'viem/chains'
-import { CHAIN_ID, PRETIUM_ADDRESS } from '../constants/constant'
+import { CHAIN_ID, cKASH_DIVVI_ID, PRETIUM_ADDRESS } from '../constants/constant'
 import { Pretium_api } from '../constants/constant'
 import { TokenBalance } from '@divvi/mobile/src/tokens/slice'
+
 
 import { TransactionRequestCIP64 } from 'viem/chains'
 import {
@@ -25,6 +29,7 @@ import {
   //   usePrepareTransactions,
 } from '@divvi/mobile'
 import { ACCOUNTVALIDATION } from '../api/types'
+import { getReferralTag } from '@divvi/referral-sdk'
 
 export interface SendTransactionProp {
   to: `0x${string}`
@@ -48,17 +53,22 @@ export type TransactionRequest = (
 export const sendTransactionStable = async (send: SendTransactionProp) => {
   let decimal = send.tokenDecimal ? send.tokenDecimal : 18
 
-  const transactionsrequest: TransactionRequest = {
+  const referralTag = getReferralTag({
+    user: send.from, 
+    consumer: cKASH_DIVVI_ID  
+  })
+  
+  const transactionsrequest:TransactionRequest = {
     from: send.from,
-    type: send.type,
+    type: send.type as any,
     to: send.to,
     data: encodeFunctionData({
       abi: erc20Abi,
       functionName: 'transfer',
       args: [send.recipient, parseUnits(send.amount, decimal)],
-    }),
+    })+referralTag as Hex,
 
-    feeCurrency: send.feeCurrency,
+    feeCurrency: send.feeCurrency,   
     gas: BigInt(100000),
     maxFeePerGas: BigInt(10000000000),
     //  maxPriorityFeePerGas: BigInt(10000000000),
@@ -67,13 +77,20 @@ export const sendTransactionStable = async (send: SendTransactionProp) => {
   }
 
   try {
-    const unlockResult = await unlockAccount()
+    const unlockResult =await unlockAccount()   // to remove on next iteration
     if (unlockResult === 'success') {
-      const txHash = await sendTransactions({
-        feeCurrency: send.tokenBalance,
-        transactions: [transactionsrequest],
+      const tx: PreparedTransactionsPossible = {
+        feeCurrency: send.tokenBalance as TokenBalance,
         type: 'possible',
-      })
+        transactions: [transactionsrequest]
+      }
+      // const txHash = await sendTransactions({
+      //   feeCurrency: send.tokenBalance,
+      //   transactions: [transactionsrequest],
+      //   type: 'possible',
+      // })
+      const txHash = await sendTransactions(tx)
+      
       return txHash[0]
     } else if (unlockResult === 'failure') {
       console.warn('Failed to unlock wallet.')

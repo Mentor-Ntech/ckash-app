@@ -85,7 +85,8 @@ export default function MPESABuyGoods(
         Alert.alert('Please provide Amount')
         return
       }
-      const { response } = await sendMoney({
+      // const { response } =
+        await sendMoney({
         shortcode: tillNumber,
         ratedTokenAmount: tokenAmount,
         rawAmount: amount,
@@ -98,7 +99,7 @@ export default function MPESABuyGoods(
         feeCurrency: selectedToken?.feeCurrencyAdapterAddress?selectedToken?.feeCurrencyAdapterAddress:selectedToken?.address as `0x${string}`,
         tokenDecimal:selectedToken?.decimals as number
       })
-      console.log('THE RESPONSE', response)
+      // console.log('THE RESPONSE', response)
       setModalVisible(true)
     } catch (error) {
       // console.log('THE ERROR', error)

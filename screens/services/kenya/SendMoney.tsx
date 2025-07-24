@@ -112,7 +112,8 @@ export default function SendMoney(
         Alert.alert('Please provide Amount')
         return
       }
-      const { response } = await sendMoney({
+      // const { response } =
+        await sendMoney({
         shortcode: phoneNumber,
         ratedTokenAmount: tokenAmount,
         rawAmount: amount,

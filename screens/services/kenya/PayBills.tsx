@@ -94,7 +94,8 @@ const [selectedToken, setSelectedToken] = React.useState<TokenBalance | null>(nu
         return
       }
 
-      const { response } = await sendMoney({
+      // const { response } =
+        await sendMoney({
         shortcode: paybillNumber,
         ratedTokenAmount: tokenAmount,
         rawAmount: amount,
@@ -108,7 +109,7 @@ const [selectedToken, setSelectedToken] = React.useState<TokenBalance | null>(nu
         feeCurrency: selectedToken?.feeCurrencyAdapterAddress?selectedToken?.feeCurrencyAdapterAddress:selectedToken?.address as `0x${string}`,
         tokenDecimal:selectedToken?.decimals as number
       })
-      console.log('THE RESPONSE', response)
+      //console.log('THE RESPONSE', response)
       setModalVisible(true)
     } catch (error) {
       setModalVisible(true);

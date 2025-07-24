@@ -179,7 +179,8 @@ export default function SendMoney(
         Alert.alert('Please Select Bank')
         return
       }
-      const { response } = await sendMoney({
+      // const { response } =
+        await sendMoney({
         account_name: accountName as string,
         ratedTokenAmount: tokenAmount,
         rawAmount: amount,

@@ -13,6 +13,7 @@ export const CHAIN_ID = 42220
 export const PRETIUM_ADDRESS = '0x8005ee53E57aB11E11eAA4EFe07Ee3835Dc02F98'
 export const CHAIN = 'celo'
 
+export const cKASH_DIVVI_ID = "0x93F40b8720943B941e1663331d8752d49C0D0544"
 // Network configurations
 export const NETWORK_CONFIG = {
   chainId: CHAIN_ID,
