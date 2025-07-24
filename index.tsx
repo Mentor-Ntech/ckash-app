@@ -53,7 +53,7 @@ const App = createApp({
       : expoConfig.scheme
     : 'example',
   divviProtocol: {
-     divviId :"0x8767667767676767676"
+     divviId :"0x93F40b8720943B941e1663331d8752d49C0D0544"
   },
   features: {
     cloudBackup: true,
