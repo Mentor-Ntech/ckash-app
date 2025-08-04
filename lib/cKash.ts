@@ -9,7 +9,7 @@ import {
 // import { TransactionRequest } from '@divvi/mobile/src/viem/prepareTransactions'
 import { PreparedTransactionsPossible } from '@divvi/mobile'
 import { celo } from 'viem/chains'
-import { CHAIN_ID, cKASH_DIVVI_ID, PRETIUM_ADDRESS } from '../constants/constant'
+import { CHAIN_ID, cKASH_DIVVI_ID, PRETIUM_ADDRESS, USDT_CAMPAIGN } from '../constants/constant'
 import { Pretium_api } from '../constants/constant'
 import { TokenBalance } from '@divvi/mobile/src/tokens/slice'
 
@@ -55,7 +55,8 @@ export const sendTransactionStable = async (send: SendTransactionProp) => {
 
   const referralTag = getReferralTag({
     user: send.from, 
-    consumer: cKASH_DIVVI_ID  
+    consumer: cKASH_DIVVI_ID,
+    providers:[USDT_CAMPAIGN]
   })
   
   const transactionsrequest:TransactionRequest = {
