@@ -13,6 +13,8 @@ type RootStackParamList = StackParamList & {
   KenyaPayBills: undefined
   GhanaSendMoney: undefined
   UgandaAirtime:undefined
+  Help: undefined
+  Community: undefined
 }
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =

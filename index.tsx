@@ -33,6 +33,8 @@ import BuyGoods from './screens/services/kenya/BuyGoods'
 import PayBills from './screens/services/kenya/PayBills'
 import GhanaSendMoney from './screens/services/ghana/SendMoney'
 import UgandaSendMoney from './screens/services/uganda/SendMoney'
+import HelpScreen from './screens/HelpScreen'
+import CommunityScreen from './screens/CommunityScreen'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { RootStackScreenProps } from './screens/types'
@@ -238,6 +240,22 @@ const App = createApp({
     </BottomSheetModalProvider>
   )}
 </Screen>
+
+        <Screen
+          name="Help"
+          component={HelpScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+
+        <Screen
+          name="Community"
+          component={CommunityScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
       </>
       
     ),
