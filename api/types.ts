@@ -109,3 +109,46 @@ export const NigeriaBanks: nigeriaBanks = {
  * 
  * 
  */
+
+// Zendesk Support Ticket Types
+export type ZendeskTicket = {
+  subject: string
+  description: string
+  requester_id?: string
+  submitter_id?: string
+  priority?: 'urgent' | 'high' | 'normal' | 'low'
+  tags?: string[]
+  custom_fields?: Record<string, any>
+}
+
+export type ZendeskUser = {
+  name: string
+  email: string
+  phone?: string
+  organization_id?: number
+  tags?: string[]
+  user_fields?: Record<string, any>
+}
+
+export type ZendeskTicketResponse = {
+  ticket: {
+    id: number
+    url: string
+    status: string
+    priority: string
+    subject: string
+    description: string
+    created_at: string
+    updated_at: string
+  }
+}
+
+export type ZendeskUserResponse = {
+  user: {
+    id: number
+    name: string
+    email: string
+    created_at: string
+    updated_at: string
+  }
+}

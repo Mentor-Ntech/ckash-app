@@ -6,7 +6,8 @@ import {
   Image,
   TouchableOpacity,
   Linking,
-  RefreshControl
+  RefreshControl,
+  StyleSheet
 } from 'react-native'
 import { RootStackScreenProps } from './types'
 import { navigate,useWallet, } from '@divvi/mobile'
@@ -95,6 +96,10 @@ export default function WalletScreen(
 
   function onPressRecieveMoney() {
     navigate('Receive')
+  }
+
+  function onPressHelp() {
+    navigate('Help')
   }
 
   React.useEffect(() => {
@@ -322,6 +327,42 @@ export default function WalletScreen(
           />
         </View>
       </View>
+      
+      {/* Floating Help Button */}
+      <TouchableOpacity
+        style={styles.floatingButton}
+        onPress={onPressHelp}
+        testID="FloatingHelpButton"
+      >
+        <Text style={styles.floatingButtonText}>?</Text>
+      </TouchableOpacity>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  floatingButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#002586',
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  floatingButtonText: {
+    color: '#ffffff',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+})

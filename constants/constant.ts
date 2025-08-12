@@ -91,6 +91,14 @@ export const services: Record<string, Service[]> = {
 const API_KEY = process.env.API_KEY || 'development_api_key'
 const BASE_URL = process.env.BASE_URL || 'https://api-dev.example.com'
 
+// Zendesk Configuration
+export const ZENDESK_CONFIG = {
+  subdomain: process.env.ZENDESK_SUBDOMAIN || 'ckash-support',
+  apiToken: process.env.ZENDESK_API_TOKEN || 'development_token',
+  email: process.env.ZENDESK_EMAIL || 'support@ckash.app',
+  baseUrl: process.env.ZENDESK_BASE_URL || 'https://ckash-support.zendesk.com',
+} as const
+
 if (!process.env.API_KEY || !process.env.BASE_URL) {
   console.warn(
     'API_KEY and BASE_URL environment variables are not set. Using fallback values for development.',
