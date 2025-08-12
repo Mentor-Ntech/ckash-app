@@ -218,8 +218,6 @@ function AddCKESBottomSheet({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // Padding applied to the content of the screen on sides and top
-    // No padding applied to the bottom by default incase of a scrollable screen
     paddingHorizontal: 16,
     paddingTop: 16,
     position: 'relative',

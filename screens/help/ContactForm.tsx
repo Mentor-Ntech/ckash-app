@@ -82,9 +82,7 @@ export default function ContactForm(
       Alert.alert('Error', 'Could not open email app. Please make sure you have an email app installed.')
     })
   }
-
-
-
+  
   return (
     <ScrollView 
       style={styles.container}

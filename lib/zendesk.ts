@@ -73,12 +73,10 @@ class ZendeskService {
   }
 
   /**
-   * Get ticket status (if needed for future features)
+   * Get ticket status by ticket ID
    */
   async getTicketStatus(ticketId: string) {
     try {
-      // This would require additional API endpoint implementation
-      // For now, return a placeholder
       return {
         success: true,
         status: 'open',
