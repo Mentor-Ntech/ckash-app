@@ -2,7 +2,7 @@
   "name": "cKash",
   "slug": "ckash",
   "scheme": "ckash",
-  "version": "3.0.0",
+  "version": "1.0.0",
   "orientation": "portrait",
   "icon": "./assets/icon.png",
   "userInterfaceStyle": "light",
@@ -22,8 +22,7 @@
       "aps-environment": "production"
     }
   },
-  "android": {
-    "versionCode": 3,
+  "android": {    
     "adaptiveIcon": {
       "foregroundImage": "./assets/adaptive-icon.png",
       "backgroundColor": "#000d5a"
