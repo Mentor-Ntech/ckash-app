@@ -21,6 +21,7 @@ class ZendeskAPI {
   }
 
   private async makeRequest<T>(endpoint: string, options: RequestInit): Promise<T> {
+    //console.log("The token",this.apiToken,this.baseURL,this.email)
     const url = `${this.baseURL}/api/v2${endpoint}`
     
     try {
@@ -30,6 +31,7 @@ class ZendeskAPI {
       })
 
       if (!response.ok) {
+       
         throw new Error(`Zendesk API error: ${response.status} ${response.statusText}`)
       }
 

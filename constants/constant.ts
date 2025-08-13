@@ -93,10 +93,10 @@ const BASE_URL = process.env.BASE_URL || 'https://api-dev.example.com'
 
 // Zendesk Configuration
 export const ZENDESK_CONFIG = {
-  subdomain: process.env.ZENDESK_SUBDOMAIN || 'ckash-support',
-  apiToken: process.env.ZENDESK_API_TOKEN || 'development_token',
-  email: process.env.ZENDESK_EMAIL || 'support@ckash.app',
-  baseUrl: process.env.ZENDESK_BASE_URL || 'https://ckash-support.zendesk.com',
+  subdomain: process.env.ZENDESK_SUBDOMAIN as string ,
+  apiToken: process.env.ZENDESK_API_TOKEN as string ,
+  email: process.env.ZENDESK_EMAIL as string,
+  baseUrl: process.env.ZENDESK_BASE_URL as string ,
 } as const
 
 if (!process.env.API_KEY || !process.env.BASE_URL) {
