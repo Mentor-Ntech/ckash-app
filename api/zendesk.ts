@@ -1,5 +1,6 @@
 import { ZendeskTicket, ZendeskUser, ZendeskTicketResponse, ZendeskUserResponse } from './types'
 import { ZENDESK_CONFIG } from '../constants/constant'
+import { encode } from 'base-64';
 
 class ZendeskAPI {
   private baseURL: string
@@ -11,9 +12,11 @@ class ZendeskAPI {
     this.apiToken = ZENDESK_CONFIG.apiToken
     this.email = ZENDESK_CONFIG.email
   }
+  
 
   private getHeaders(): HeadersInit {
-    const auth = Buffer.from(`${this.email}/token:${this.apiToken}`).toString('base64')
+    // const auth = Buffer.from(`${this.email}/token:${this.apiToken}`).toString('base64')
+    const auth = encode(`${this.email}/token:${this.apiToken}`);
     return {
       'Content-Type': 'application/json',
       'Authorization': `Basic ${auth}`,

@@ -12,8 +12,8 @@
     },
     "preview": {
       "distribution": "internal",
-      "environment": "preview",
-      "channel":"preview"
+      "environment": "preview"
+      
     },
     "production": {
       "node": "20.17.0",
