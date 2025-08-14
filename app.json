@@ -37,6 +37,14 @@
   },
   "plugins": [
     [
+      "expo-build-properties",
+      {
+        "android": {
+          "kotlinVersion": "2.0.0"
+        }
+      }
+    ],
+    [
       "expo-splash-screen",
       {
         "image": "./assets/splash-icon.png",
@@ -54,6 +62,7 @@
         },
         "android": {
           "extraMavenRepos": ["https://sdk.withpersona.com/android/releases"]
+          
         }
       }
     ],

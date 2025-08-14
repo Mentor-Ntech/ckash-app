@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
 } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
+import SuccessIcon from '../assets/icons/success-icon.svg'
 
 interface AlertModalProps {
   visible: boolean
@@ -68,13 +69,17 @@ export const AlertModal: React.FC<AlertModalProps> = ({
               <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
                 <Ionicons name="close" size={20} color="#222" />
               </TouchableOpacity>
-              <View style={styles.iconWrapper}>
-                <Ionicons
-                  name={icon.name as any}
-                  size={48}
-                  color={icon.color}
-                />
-              </View>
+                      <View style={styles.iconWrapper}>
+                 {iconType === 'success' ? (
+                   <SuccessIcon width={80} height={80} />
+                 ) : (
+                   <Ionicons
+                     name={icon.name as any}
+                     size={80}
+                     color={icon.color}
+                   />
+                 )}
+               </View>
               <Text style={styles.title}>{title}</Text>
               {accountName && (
                 <Text style={styles.description}>{accountName}</Text>
@@ -99,7 +104,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modal: {
-    width: 370,
+    width: 320,
     backgroundColor: '#E8F0FF',
     borderRadius: 16,
     padding: 24,
@@ -119,9 +124,6 @@ const styles = StyleSheet.create({
   iconWrapper: {
     marginTop: 8,
     marginBottom: 16,
-    backgroundColor: '#fff',
-    borderRadius: 48,
-    padding: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },

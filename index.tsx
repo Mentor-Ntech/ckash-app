@@ -1,5 +1,7 @@
+
 import 'react-native-gesture-handler'
 import 'react-native-reanimated'
+import "./utils/base64"
 import { createApp } from '@divvi/mobile'
 import { registerRootComponent } from 'expo'
 import Constants from 'expo-constants'

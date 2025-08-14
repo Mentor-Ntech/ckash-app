@@ -3,7 +3,7 @@ import { navigate } from '@divvi/mobile'
 import { TokenBalance } from '@divvi/mobile/src/tokens/slice'
 import Touchable from '@divvi/mobile/src/components/Touchable'
 import React, { useRef } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { RootStackScreenProps } from './types'
 import Add from '../assets/home/Add'
@@ -86,6 +86,10 @@ export default function HomeScreen(_props: RootStackScreenProps<'Home'>) {
     }
   }
 
+  function onPressHelp() {
+    navigate('Help')
+  }
+
   return (
     <View testID="Home" style={styles.container}>
       <FlatCard testID="FlatCard/AddCKES" onPress={onPressAddCKES}>
@@ -130,6 +134,16 @@ export default function HomeScreen(_props: RootStackScreenProps<'Home'>) {
           <Text style={styles.ctaText}>{t('home.withdraw')}</Text>
         </View>
       </FlatCard>
+      
+      {/* Floating Help Button */}
+      <TouchableOpacity
+        style={styles.floatingButton}
+        onPress={onPressHelp}
+        testID="FloatingHelpButton"
+      >
+        <Text style={styles.floatingButtonText}>?</Text>
+      </TouchableOpacity>
+      
       <AddCKESBottomSheet forwardedRef={addCKESBottomSheetRef} />
     </View>
   )
@@ -204,8 +218,6 @@ function AddCKESBottomSheet({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // Padding applied to the content of the screen on sides and top
-    // No padding applied to the bottom by default incase of a scrollable screen
     paddingHorizontal: 16,
     paddingTop: 16,
     position: 'relative',
@@ -248,5 +260,29 @@ const styles = StyleSheet.create({
   },
   bottomSheetCtaSubText: {
     ...typeScale.bodySmall,
+  },
+  floatingButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#002586',
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  floatingButtonText: {
+    color: '#ffffff',
+    fontSize: 24,
+    fontWeight: 'bold',
   },
 })

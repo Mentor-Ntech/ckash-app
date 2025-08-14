@@ -18,6 +18,9 @@ const { BASE_URL,
   ZENDESK_BASE_URL,
  } = Constants.expoConfig?.extra || {};
 
+
+
+
 export const CHAIN_ID = 42220
 export const PRETIUM_ADDRESS = '0x8005ee53E57aB11E11eAA4EFe07Ee3835Dc02F98'
 export const CHAIN = 'celo'
