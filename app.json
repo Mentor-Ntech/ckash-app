@@ -2,14 +2,14 @@
   "name": "cKash",
   "slug": "ckash",
   "scheme": "ckash",
-  "version": "3.0.0",
+  "version": "1.0.0",
   "orientation": "portrait",
   "icon": "./assets/icon.png",
   "userInterfaceStyle": "light",
   "newArchEnabled": false,
   "ios": {
     "supportsTablet": false,
-    "bundleIdentifier": "xyz.mobilestack.mento",
+    "bundleIdentifier": "com.ckash.app",
     "infoPlist": {
       "NSCameraUsageDescription": "Connecting your camera allows you to scan QR codes for transactions.",
       "NSUserTrackingUsageDescription": "We use the advertising identifier to accurately attribute app installs from ad campaigns.",
@@ -23,12 +23,11 @@
     }
   },
   "android": {
-    "versionCode": 3,
-    "adaptiveIcon": {
+        "adaptiveIcon": {
       "foregroundImage": "./assets/adaptive-icon.png",
       "backgroundColor": "#000d5a"
     },
-    "package": "xyz.mobilestack.mento",
+    "package": "com.ckash.app",
     "permissions": [
       "android.permission.CAMERA",
       "android.permission.ACCESS_NETWORK_STATE",

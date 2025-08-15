@@ -1,5 +1,7 @@
+
 import 'react-native-gesture-handler'
 import 'react-native-reanimated'
+//import "./utils/base64"
 import { createApp } from '@divvi/mobile'
 import { registerRootComponent } from 'expo'
 import Constants from 'expo-constants'
@@ -33,6 +35,9 @@ import BuyGoods from './screens/services/kenya/BuyGoods'
 import PayBills from './screens/services/kenya/PayBills'
 import GhanaSendMoney from './screens/services/ghana/SendMoney'
 import UgandaSendMoney from './screens/services/uganda/SendMoney'
+import ContactForm from './screens/help/ContactForm'
+import HelpScreen from './screens/help/HelpScreen'
+import CommunityScreen from './screens/help/CommunityScreen'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { RootStackScreenProps } from './screens/types'
@@ -238,6 +243,45 @@ const App = createApp({
     </BottomSheetModalProvider>
   )}
 </Screen>
+
+        <Screen
+          name="Help"
+          options={{
+            headerBackVisible: true,
+            headerShown: true,
+            headerTitle: 'Help',
+          }}
+        >
+          {(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"Help">) => (
+            <HelpScreen {...props} />
+          )}
+        </Screen>
+
+        <Screen
+          name="Community"
+          options={{
+            headerBackVisible: true,
+            headerShown: true,
+            headerTitle: 'Community',
+          }}
+        >
+          {(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"Community">) => (
+            <CommunityScreen {...props} />
+          )}
+        </Screen>
+
+        <Screen
+          name="ContactForm"
+          options={{
+            headerBackVisible: true,
+            headerShown: true,
+            headerTitle: 'Contact Support',
+          }}
+        >
+          {(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"ContactForm">) => (
+            <ContactForm {...props} />
+          )}
+        </Screen>
       </>
       
     ),

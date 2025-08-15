@@ -8,6 +8,18 @@ import SendMoneyIcon from '../assets/icons/opay-icon.svg'
 import MTNIcon from '../assets/icons/mtn-icon.svg'
 import TelecelIcon from '../assets/icons/telecel-icon.svg'
 import BuyGoodsIcon from '../assets/icons/buygoods-icon.svg'
+import Constants from 'expo-constants';
+
+const { BASE_URL,
+  API_KEY,
+  ZENDESK_SUBDOMAIN,
+  ZENDESK_API_TOKEN,
+  ZENDESK_EMAIL,
+  ZENDESK_BASE_URL,
+ } = Constants.expoConfig?.extra || {};
+
+
+
 
 export const CHAIN_ID = 42220
 export const PRETIUM_ADDRESS = '0x8005ee53E57aB11E11eAA4EFe07Ee3835Dc02F98'
@@ -88,10 +100,18 @@ export const services: Record<string, Service[]> = {
 
 // API configuration with fallback values
 // Use fallback values if environment variables are not set
-const API_KEY = process.env.API_KEY || 'development_api_key'
-const BASE_URL = process.env.BASE_URL || 'https://api-dev.example.com'
+//const API_KEY = process.env.API_KEY || 'development_api_key'
+//const BASE_URL = process.env.BASE_URL || 'https://api-dev.example.com'
 
-if (!process.env.API_KEY || !process.env.BASE_URL) {
+// Zendesk Configuration
+export const ZENDESK_CONFIG = {
+  subdomain: ZENDESK_SUBDOMAIN as string ,
+  apiToken:ZENDESK_API_TOKEN as string ,
+  email: ZENDESK_EMAIL as string,
+  baseUrl: ZENDESK_BASE_URL as string ,
+} as const
+
+if (!API_KEY || !BASE_URL) {
   console.warn(
     'API_KEY and BASE_URL environment variables are not set. Using fallback values for development.',
   )
