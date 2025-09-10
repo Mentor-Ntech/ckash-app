@@ -38,6 +38,7 @@ import UgandaSendMoney from './screens/services/uganda/SendMoney'
 import ContactForm from './screens/help/ContactForm'
 import HelpScreen from './screens/help/HelpScreen'
 import CommunityScreen from './screens/help/CommunityScreen'
+import ReferEarnScreen from './screens/help/ReferEarnScreen'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { RootStackScreenProps } from './screens/types'
@@ -280,6 +281,19 @@ const App = createApp({
         >
           {(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"ContactForm">) => (
             <ContactForm {...props} />
+          )}
+        </Screen>
+
+        <Screen
+          name="ReferEarn"
+          options={{
+            headerBackVisible: true,
+            headerShown: true,
+            headerTitle: 'Refer And Earn Rewards',
+          }}
+        >
+          {(props: React.JSX.IntrinsicAttributes & RootStackScreenProps<"ReferEarn">) => (
+            <ReferEarnScreen {...props} />
           )}
         </Screen>
       </>

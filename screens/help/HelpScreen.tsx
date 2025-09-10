@@ -1,16 +1,15 @@
 import React from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Linking } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import { RootStackScreenProps } from '../types'
-import { colors, typeScale } from '../../utils'
+import { colors } from '../../utils'
 
-export default function HelpScreen({ navigation }: RootStackScreenProps<'Help'>) {
-  const { t } = useTranslation()
+export default function HelpScreen({ navigation }: Readonly<RootStackScreenProps<'Help'>>) {
 
   const helpOptions = [
     { id: 'faq', title: 'Frequently Asked Questions', onPress: () => Linking.openURL('https://ckash.app/#faqs') },
     { id: 'contact', title: 'Contact', onPress: () => navigation.navigate('ContactForm') },
     { id: 'community', title: 'Community', onPress: () => navigation.navigate('Community') },
+    { id: 'refer', title: 'Refer & Earn Rewards', onPress: () => navigation.navigate('ReferEarn') },
   ]
 
   return (
