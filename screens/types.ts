@@ -16,7 +16,7 @@ type RootStackParamList = StackParamList & {
   Help: undefined
   Community: undefined
   ContactForm: undefined
-  ReferEarn: undefined
+  ReferEarn: { code?: string }
 }
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =

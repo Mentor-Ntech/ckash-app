@@ -8,7 +8,10 @@ export default ({ config }) => ({
       ZENDESK_SUBDOMAIN:process.env.ZENDESK_SUBDOMAIN,
       ZENDESK_API_TOKEN:process.env.ZENDESK_API_TOKEN,
       ZENDESK_EMAIL:process.env.ZENDESK_EMAIL,
-      ZENDESK_BASE_URL:process.env.ZENDESK_BASE_URL,
+      ZENDESK_BASE_URL: process.env.ZENDESK_BASE_URL,
+      REFERRAL_KEY: process.env.REFERRAL_KEY,
+      REFERRAL_BASE_URL:process.env.REFERRAL_BASE_URL
+      
 
     }
 })

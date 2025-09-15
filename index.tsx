@@ -46,6 +46,7 @@ import { RootStackScreenProps } from './screens/types'
 
 
 
+
 const expoConfig = Constants.expoConfig
 if (!expoConfig) {
   throw new Error('expoConfig is not available')
@@ -343,15 +344,16 @@ const App = createApp({
     showPositions: false,
     showImportTokensFlow: false,
     showSwapTokenFilters: false,
-    enableSwapAppFee: false,
+    enableSwapAppFee: false   
   },
 })
+
 
 
 function AppWrapper() {  
   return (    
     <GestureHandlerRootView style={{ flex: 1 }}>      
-        <BottomSheetModalProvider>       
+      <BottomSheetModalProvider>       
           <App />
         </BottomSheetModalProvider>      
       </GestureHandlerRootView>

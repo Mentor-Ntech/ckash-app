@@ -1,4 +1,4 @@
-import { Pretium } from '../api/api'
+import { CkashReferral, Pretium } from '../api/api'
 import MpesaIcon from '../assets/icons/sendmoney-icon.svg'
 import AirtimeIcon from '../assets/icons/airtime-icon.svg'
 import DataIcon from '../assets/icons/network-icon.svg'
@@ -16,6 +16,9 @@ const { BASE_URL,
   ZENDESK_API_TOKEN,
   ZENDESK_EMAIL,
   ZENDESK_BASE_URL,
+  REFERRAL_KEY,
+  REFERRAL_BASE_URL
+
  } = Constants.expoConfig?.extra || {};
 
 
@@ -118,5 +121,6 @@ if (!API_KEY || !BASE_URL) {
 }
 
 const Pretium_api = new Pretium(API_KEY, BASE_URL)
+const CkashReferral_api = new CkashReferral(REFERRAL_KEY,REFERRAL_BASE_URL)
 
-export { Pretium_api }
+export { Pretium_api,CkashReferral_api,REFERRAL_BASE_URL,REFERRAL_KEY }

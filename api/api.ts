@@ -126,4 +126,76 @@ class Pretium {
   //banks
 }
 
-export { Pretium }
+//Refferall
+
+class CkashReferral{
+  api_key: string
+  baseURL: string
+
+  constructor(api_Key: string, baseURL: string) {
+    this.api_key = api_Key
+    this.baseURL = baseURL
+  }
+
+  getHeaders = () => {
+    const requestHeaders: HeadersInit = new Headers()
+    requestHeaders.set('Content-Type', 'application/json')
+    requestHeaders.set('x-api-key', this.api_key)
+    //console.log('THE REQUEST HEADERS', requestHeaders)
+    return requestHeaders
+  }
+
+  createReferralCode = async (address: `0x${string}`) => {
+    const payload = {
+      userAddress: address
+    }
+    console.log("The payload for referral",payload)
+    const requestOptions = {
+      method: 'POST' as const,
+      headers: this.getHeaders(),
+      body: JSON.stringify(payload),
+    }
+    console.log("The request",requestOptions)
+    const url = `${this.baseURL}api/v1/referral/create`
+    const response = await fetch(url, requestOptions)
+    const data = await response.json()
+    console.log("The data",data)
+    return data
+  }
+
+  getUserReferralCode = async (address: `0x${string}`) => {
+    
+    const requestOptions = {
+      method: 'GET' as const,
+      headers: this.getHeaders()
+     
+    }
+    const url = `${this.baseURL}api/v1/referral/referral-code?address=${address}`
+    const response = await fetch(url, requestOptions)
+    const data = await response.json()
+    console.log("The data the result",data)
+    return data
+    
+  }
+
+  claimReferralCode = async (address:`0x${string}`,code:string) => {
+    const payload = {
+      userAddress: address,
+      code:code
+    }
+    const requestOptions = {
+      method: 'POST' as const,
+      headers: this.getHeaders(),
+      body: JSON.stringify(payload),
+    }
+    const url = `${this.baseURL}api/v1/referral/claim`
+    const response = await fetch(url, requestOptions)
+    const data = await response.json()
+    return data
+    
+  }
+
+
+}
+
+export { Pretium,CkashReferral}
