@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   Share,
+  Image,
   Alert,
   TouchableOpacity,
   ActivityIndicator,
@@ -23,7 +24,8 @@ import { useWalletClient } from '@divvi/mobile';
 import { useRoute } from '@react-navigation/native';
 import AlertModal from '../../components/AlertModal';
 import { useReferralStore } from '../../store/referralStore';
-import { useCopyToClipboard } from '../../hooks/useCopyToClipboard(';
+import { useCopyToClipboard } from '../../hooks/useCopyToClipboard';
+import tw from 'twrnc'
 
 
 export default function ReferEarnScreen({ navigation }: Readonly<RootStackScreenProps<'ReferEarn'>>) {
@@ -42,6 +44,7 @@ export default function ReferEarnScreen({ navigation }: Readonly<RootStackScreen
   const { setReferralCode, clearReferralCode } = useReferralStore();
   const referralCode = useReferralStore((state) => state.referralCode);
   const referralLink = useReferralStore((state) => state.referralLink);
+  const userAddress = useReferralStore((state) => state.userAddress );
 
   //console.log("THE STATES", referralCode, referralLink)
 
@@ -65,11 +68,15 @@ export default function ReferEarnScreen({ navigation }: Readonly<RootStackScreen
   
     const fetchReferralCode = async () => {
       if (!address) return;
-      
-      if (referralCode) {
+      if (userAddress?.toLowerCase() === address.toLowerCase()) {
         setLoading(false);
         return;
       }
+      
+      // if (referralCode) {
+      //   setLoading(false);
+      //   return;
+      // }
   
       try {
         setLoading(true);
@@ -171,20 +178,31 @@ export default function ReferEarnScreen({ navigation }: Readonly<RootStackScreen
       contentContainerStyle={styles.contentContainer}
       showsVerticalScrollIndicator={false}
     >
-      <View style={styles.header}>
-        <Text style={styles.subtitle}>Refer a user via your code to earn rewards</Text>
-      </View>
+      {/* <View style={styles.header}>
+        <Text style={styles.subtitle}>Refer a user via your code to earn rewards</Text>        
+      </View> */}
+     
+       <View style={styles.imageContainer}>   
+      <Image
+        source={require('../../assets/refer.png')}
+        style={styles.image}
+        resizeMode="contain"
+      />
+  
+  </View>
+     
 
       {loading ? (
         <ActivityIndicator size="large" color={colors.contentPrimary} />
       ) : referralCode ? (
         <>
-          <QRCodeSection
+          {/* <QRCodeSection
             qrCodeComponent={
               <QRCode value={`ckash://ReferEarn/${referralCode}`} size={REFER_EARN_CONSTANTS.QR_CODE_SIZE} />
             }
-          />
-
+            
+          /> */}
+            
           <View style={styles.section}>
             <Text style={styles.sectionLabel}>Invite via (Referral Code)</Text>
             <CopyableField label="My Referral Code" value={referralCode} onCopy={handleCopyCode} />
@@ -202,7 +220,7 @@ export default function ReferEarnScreen({ navigation }: Readonly<RootStackScreen
         </>
       ) : (
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>You don’t have a referral code yet.</Text>
+         
 
           {claimedCodeFromLink && (
             <TouchableOpacity
@@ -228,10 +246,11 @@ export default function ReferEarnScreen({ navigation }: Readonly<RootStackScreen
             disabled={claiming || !manualCode}
           >
             <Text style={styles.createButtonText}>{claiming ? 'Claiming...' : 'Claim Code'}</Text>
-          </TouchableOpacity>
+              </TouchableOpacity>
+              <Text style={styles.sectionLabel}>You don’t have a referral code yet.</Text>
 
           <TouchableOpacity style={styles.createButton} onPress={handleCreateReferralCode} disabled={creating}>
-            <Text style={styles.createButtonText}>{creating ? 'Creating...' : 'Create Referral Code'}</Text>
+            <Text style={styles.createButtonText}>{creating ? 'Unlocking Code...' : 'Unlock Rewards'}</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -253,11 +272,22 @@ export default function ReferEarnScreen({ navigation }: Readonly<RootStackScreen
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
   contentContainer: { padding: 20, paddingTop: 20, paddingBottom: 40 },
-  header: { alignItems: 'flex-start', marginBottom: 32 },
+  header: { alignItems: 'flex-start', marginBottom: 8 },
   subtitle: { fontSize: 16, color: colors.contentSecondary, textAlign: 'left', lineHeight: 22 },
   section: { marginBottom: 24 },
   sectionLabel: { fontSize: 16, fontWeight: '600', color: colors.contentPrimary, marginBottom: 12 },
   input: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 10, fontSize: 16, marginBottom: 12, color: colors.contentPrimary },
   createButton: { backgroundColor: colors.contentPrimary, paddingVertical: 12, paddingHorizontal: 20, borderRadius: 8, alignItems: 'center' },
   createButtonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  imageContainer: {    
+    height: 200, 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    overflow: 'hidden',
+    marginBottom:20
+  },
+  image: {    
+    width: '100%',
+    height: '90%',
+  },
 });
