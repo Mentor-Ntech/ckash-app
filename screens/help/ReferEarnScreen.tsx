@@ -184,7 +184,7 @@ export default function ReferEarnScreen({ navigation }: Readonly<RootStackScreen
      
        <View style={styles.imageContainer}>   
       <Image
-        source={require('../../assets/refer.png')}
+        source={require('../../assets/referral.png')}
         style={styles.image}
         resizeMode="contain"
       />
