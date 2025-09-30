@@ -1,3 +1,4 @@
+import { CKASH_CAll_BACK, REFERRAL_BASE_URL } from '../constants/constant'
 import { ACCOUNTVALIDATION, MAKEPAYMENT, REFUND } from './types'
 
 class Pretium {
@@ -84,7 +85,9 @@ class Pretium {
       account_number:makepayment.account_number,
       account_name: makepayment.account_name,
       bank_code: makepayment.bank_code,
-      bank_name:makepayment.bank_name
+      bank_name: makepayment.bank_name,
+      callback_url: `${REFERRAL_BASE_URL}api/v1/ckash/callback/${makepayment.userAddress}`,
+      userAddress:makepayment.userAddress
     }
     console.log("THE PAYLOAD",payload)
     const requestOptions = {

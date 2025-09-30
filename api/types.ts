@@ -11,7 +11,9 @@ export type MAKEPAYMENT ={
  country_code?:string
  account_name?: string,
  bank_name?: string,
- bank_code?:string
+  bank_code?: string,
+  callback_url?: string,
+ userAddress: string
  
 }
 
