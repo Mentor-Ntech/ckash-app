@@ -42,6 +42,7 @@ import ReferEarnScreen from './screens/help/ReferEarnScreen'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { RootStackScreenProps } from './screens/types'
+import { SEGMENT_API } from './constants/constant'
 
 
 
@@ -64,6 +65,9 @@ const App = createApp({
   },
   features: {
     cloudBackup: true,
+    segment: {
+      apiKey:SEGMENT_API
+    }
   },
   themes: {
     default: {
@@ -308,6 +312,7 @@ const App = createApp({
   networks: {
     enabledNetworkIds: ['celo-mainnet'],
   },
+  
   experimental: {
     activity: {
       hideActionsCarousel: true,
@@ -344,7 +349,7 @@ const App = createApp({
     showPositions: false,
     showImportTokensFlow: false,
     showSwapTokenFilters: false,
-    enableSwapAppFee: false   
+    enableSwapAppFee: false
   },
 })
 

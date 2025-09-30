@@ -18,7 +18,8 @@ const { BASE_URL,
   ZENDESK_BASE_URL,
   REFERRAL_KEY,
   REFERRAL_BASE_URL,
-  CKASH_CAll_BACK
+  CKASH_CAll_BACK,
+  SEGMENT_API
 
  } = Constants.expoConfig?.extra || {};
 
@@ -124,4 +125,4 @@ if (!API_KEY || !BASE_URL) {
 const Pretium_api = new Pretium(API_KEY, BASE_URL)
 const CkashReferral_api = new CkashReferral(REFERRAL_KEY,REFERRAL_BASE_URL)
 
-export { Pretium_api,CkashReferral_api,REFERRAL_BASE_URL,REFERRAL_KEY,CKASH_CAll_BACK }
+export { Pretium_api,CkashReferral_api,REFERRAL_BASE_URL,REFERRAL_KEY,CKASH_CAll_BACK,SEGMENT_API }
