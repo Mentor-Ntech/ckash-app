@@ -129,7 +129,7 @@ export default function SendMoney(
       //console.log('THE RESPONSE', response)
       setModalVisible(true)
     } catch (error) {
-      //console.log('THE ERROR', error)
+      console.log('THE ERROR', error)
       setModalVisible(true);
     }
   }
