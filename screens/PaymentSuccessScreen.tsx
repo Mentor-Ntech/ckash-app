@@ -7,17 +7,20 @@ import FailureIcon from '../assets/icons/failure-icon.svg'
 import CopyIcon from '../assets/icons/copy-icon.svg'
 import PrimaryButton from '../components/PrimaryButton'
 import SecondaryButton from '../components/ui/SecondaryButton'
+import { formatDate } from '../lib/date'
 
 interface TransactionDetails {
-  id: string
-  type: 'airtime' | 'send'
-  title: string
-  recipient?: string
-  date: string
-  amount: string
-  currency: string
-  isDebit: boolean
-  status: 'success' | 'failed'
+  id: string;
+  status: string; 
+  transactionCode: string;
+  receiptNumber?: string;
+      publicName?: string;
+      mobileNetwork?: string,
+  amount:string,
+  message?: string;
+  userAddress?: `0x${string}`;
+  createdAt: string; 
+  updatedAt: string; 
 }
 
 const TransactionDetailsScreen: React.FC<Readonly<RootStackScreenProps<'TransactionDetails'>>> = ({ route, navigation }) => {
@@ -47,7 +50,13 @@ const TransactionDetailsScreen: React.FC<Readonly<RootStackScreenProps<'Transact
   const paymentTime = 'Oct 1 2025, 13:22:16'
 
   const isSuccess = transaction.status === 'success'
-  const StatusIcon = isSuccess ? SuccessIcon : FailureIcon
+  const StatusIcon =
+  transaction.status === "COMPLETE"
+    ? SuccessIcon
+    : transaction.status === "PENDING"
+    ? FailureIcon
+    : FailureIcon;
+
 
   return (
     <View style={styles.container}>
@@ -57,13 +66,20 @@ const TransactionDetailsScreen: React.FC<Readonly<RootStackScreenProps<'Transact
           <StatusIcon width={80} height={80} />
         </View>
         <Text style={styles.statusTitle}>
-          {isSuccess ? 'Payment Success!' : 'Payment Failed!'}
+        {transaction.status === "COMPLETE"
+  ? "Payment Success!"
+  : transaction.status === "PENDING"
+  ? "Payment Pending..."
+  : "Payment Failed!"}
+
         </Text>
         <Text style={styles.statusSubtitle}>
-          {isSuccess 
-            ? 'Your payment has been successfully done.' 
-            : 'Your payment could not be completed. Please try again.'
-          }
+        {transaction.status === "COMPLETE"
+  ? "Your payment was successful."
+  : transaction.status === "PENDING"
+  ? "Your payment is being processed."
+  : "Your payment failed. Please try again."}
+
         </Text>
       </View>
 
@@ -71,14 +87,14 @@ const TransactionDetailsScreen: React.FC<Readonly<RootStackScreenProps<'Transact
       <View style={styles.detailsCard}>
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>Amount</Text>
-          <Text style={styles.detailValueAmount}>{transaction.currency}{transaction.amount}</Text>
+          <Text style={styles.detailValueAmount}>{transaction.amount}</Text>
         </View>
 
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>Payment Status</Text>
-          <View style={[styles.statusBadge, { backgroundColor: isSuccess ? '#10B981' : '#EF4444' }]}>
+          <View style={[styles.statusBadge, { backgroundColor: transaction.status === "COMPLETE" ? '#10B981' : '#EF4444' }]}>
             <Text style={styles.statusBadgeText}>
-              {isSuccess ? 'Success' : 'Failed'}
+              {transaction.status === "COMPLETE" ? 'Success' : 'Failed'}
             </Text>
           </View>
         </View>
@@ -88,7 +104,7 @@ const TransactionDetailsScreen: React.FC<Readonly<RootStackScreenProps<'Transact
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>Receipt Number</Text>
           <View style={styles.copyableRow}>
-            <Text style={styles.detailValue}>{receiptNumber}</Text>
+            <Text style={styles.detailValue}>{transaction.receiptNumber}</Text>
             <TouchableOpacity onPress={handleCopyReceipt} style={styles.copyButton}>
               <CopyIcon width={16} height={16} />
             </TouchableOpacity>
@@ -96,9 +112,9 @@ const TransactionDetailsScreen: React.FC<Readonly<RootStackScreenProps<'Transact
         </View>
 
         <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>Transaction Code</Text>
+          <Text style={styles.detailLabel}>TxCode</Text>
           <View style={styles.copyableRow}>
-            <Text style={styles.detailValue}>{transactionCode}</Text>
+            <Text style={styles.detailValue}>{transaction.transactionCode}</Text>
             <TouchableOpacity onPress={handleCopyTransactionCode} style={styles.copyButton}>
               <CopyIcon width={16} height={16} />
             </TouchableOpacity>
@@ -107,33 +123,33 @@ const TransactionDetailsScreen: React.FC<Readonly<RootStackScreenProps<'Transact
 
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>Name</Text>
-          <Text style={styles.detailValue}>{transaction.recipient || 'N/A'}</Text>
+          <Text style={styles.detailValue}>{transaction.publicName ||  'N/A'}</Text>
         </View>
 
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>Payment Method</Text>
-          <Text style={styles.detailValue}>Wallet</Text>
+          <Text style={styles.detailValue}>{transaction.mobileNetwork }</Text>
         </View>
 
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>Payment Time</Text>
-          <Text style={styles.detailValue}>{paymentTime}</Text>
+          <Text style={styles.detailValue}>{formatDate(transaction.createdAt)}</Text>
         </View>
       </View>
 
       {/* Action Buttons */}
       <View style={styles.buttonContainer}>
-        {isSuccess && (
+        {transaction.status === "COMPLETE"  && (
           <SecondaryButton
             label="Share Receipt"
             onPress={handleShareReceipt}
           />
         )}
         
-        <PrimaryButton
-          label={isSuccess ? "Back to Home" : "Try Again"}
+        {/* <PrimaryButton
+          label={transaction.status === "COMPLETE"  ? "Back to Home" : "Try Again"}
           onPress={handleBackToHome}
-        />
+        /> */}
       </View>
     </View>
   )
@@ -188,7 +204,7 @@ const styles = StyleSheet.create({
   },
   detailValue: {
     fontFamily: 'Heebo-Medium',
-    fontSize: 14,
+    fontSize: 11,
     lineHeight: 20,
     color: colors.contentPrimary,
   },

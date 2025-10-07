@@ -20,15 +20,18 @@ type RootStackParamList = StackParamList & {
   TransactionHistory: undefined
   TransactionDetails: {
     transaction: {
-      id: string
-      type: 'airtime' | 'send'
-      title: string
-      recipient?: string
-      date: string
-      amount: string
-      currency: string
-      isDebit: boolean
-      status: 'success' | 'failed'
+      id: string;
+  status: string; // e.g. "COMPLETE"
+  transactionCode: string;
+  receiptNumber?: string;
+      publicName?: string;
+      mobileNetwork?: string,
+  amount:string,
+  message?: string;
+  userAddress?: `0x${string}`;
+  createdAt: string; 
+  updatedAt: string; 
+      
     }
   }
 }

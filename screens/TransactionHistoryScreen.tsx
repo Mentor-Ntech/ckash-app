@@ -2,9 +2,18 @@ import React from 'react'
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
 import { RootStackScreenProps } from './types'
 import { colors } from '../utils'
-import { navigate } from '@divvi/mobile'
-import BlueAirtimeIcon from '../assets/icons/blue-airtime-icon.svg'
+import { navigate, useWalletClient } from '@divvi/mobile'
 import PalmpayIcon from '../assets/icons/palmpay-icon.svg'
+import Mpesa from '../assets/icons/mpesa-icon.svg'
+import Moniepoint from '../assets/icons/moniepoint-icon.svg'
+import Opay from '../assets/icons/opay-icon.svg'
+import MTN from '../assets/icons/mtn-icon.svg'
+import Airtel from '../assets/icons/airtel-icon.svg'
+import Telcel from '../assets/icons/telecel-icon.svg'
+import AirtelTigo from '../assets/icons/airteltigo-icon.svg'
+import { useCkashReferral } from '../hooks/useReferral'
+import {  OffchainTransaction } from '../api/types'
+import { formatDate } from '../lib/date'
 
 interface Transaction {
   id: string
@@ -18,105 +27,32 @@ interface Transaction {
   status: 'success' | 'failed'
 }
 
-const mockTransactions: Transaction[] = [
-  {
-    id: '1',
-    type: 'airtime',
-    title: 'Airtime Purchase',
-    date: 'Jul 15, 2025',
-    amount: '10,000.99',
-    currency: 'NGN',
-    isDebit: true,
-    status: 'success',
-  },
-  {
-    id: '2',
-    type: 'send',
-    title: 'Sent: Lemonr Pablo',
-    recipient: 'Lemonr Pablo',
-    date: 'Jul 15, 2025',
-    amount: '607.64',
-    currency: 'cNGN',
-    isDebit: true,
-    status: 'success',
-  },
-  {
-    id: '3',
-    type: 'send',
-    title: 'Sent: Lemonr Pablo',
-    recipient: 'Lemonr Pablo',
-    date: 'Jul 15, 2025',
-    amount: '607.64',
-    currency: 'cNGN',
-    isDebit: true,
-    status: 'failed',
-  },
-  {
-    id: '4',
-    type: 'airtime',
-    title: 'Airtime Purchase',
-    date: 'Jul 15, 2025',
-    amount: '89.99',
-    currency: '$',
-    isDebit: true,
-    status: 'success',
-  },
-  {
-    id: '5',
-    type: 'send',
-    title: 'Sent: Lemonr Pablo',
-    recipient: 'Lemonr Pablo',
-    date: 'Jul 15, 2025',
-    amount: '607.64',
-    currency: 'cNGN',
-    isDebit: true,
-    status: 'failed',
-  },
-  {
-    id: '6',
-    type: 'airtime',
-    title: 'Airtime Purchase',
-    date: 'Jul 15, 2025',
-    amount: '89.99',
-    currency: '$',
-    isDebit: true,
-    status: 'success',
-  },
-  {
-    id: '7',
-    type: 'send',
-    title: 'Sent: Lemonr Pablo',
-    recipient: 'Lemonr Pablo',
-    date: 'Jul 15, 2025',
-    amount: '607.64',
-    currency: 'cNGN',
-    isDebit: true,
-    status: 'success',
-  },
-  {
-    id: '8',
-    type: 'airtime',
-    title: 'Airtime Purchase',
-    date: 'Jul 15, 2025',
-    amount: '89.99',
-    currency: '$',
-    isDebit: true,
-    status: 'failed',
-  },
-  {
-    id: '9',
-    type: 'airtime',
-    title: 'Airtime Purchase',
-    date: 'Jul 15, 2025',
-    amount: '89.99',
-    currency: '$',
-    isDebit: true,
-    status: 'success',
-  },
-]
+export type Network =
+  | 'Safaricom'
+  | 'MTN'
+  | 'AirtelTigo'
+  | 'Telcel'
+  | 'Airtel'
+  | 'Palmpay'
+  | 'Moniepoint'
+  | 'Opay';
 
-const TransactionItem: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
-  const IconComponent = transaction.type === 'airtime' ? BlueAirtimeIcon : PalmpayIcon
+const networkIcons: Record<Network, React.FC<any>> = {
+  Safaricom: Mpesa,
+  MTN,
+  AirtelTigo,
+  Telcel,
+  Airtel,
+  Palmpay: PalmpayIcon,
+  Moniepoint,
+  Opay,
+};
+
+
+
+const TransactionItem: React.FC<{ transaction: OffchainTransaction }> = ({ transaction }) => {
+  const IconComponent = networkIcons[transaction.mobileNetwork as Network] || PalmpayIcon;
+
 
   const handleTransactionPress = () => {
     navigate('TransactionDetails', { transaction })
@@ -132,12 +68,17 @@ const TransactionItem: React.FC<{ transaction: Transaction }> = ({ transaction }
         <IconComponent width={40} height={40} />
       </View>
       <View style={styles.transactionDetails}>
-        <Text style={styles.transactionTitle}>{transaction.title}</Text>
-        <Text style={styles.transactionDate}>{transaction.date}</Text>
+      <Text style={styles.transactionTitle}>
+  {transaction.mobileNetwork === "Safaricom"
+    ? "Mpesa"
+    : transaction.mobileNetwork}
+</Text>
+
+        <Text style={styles.transactionDate}>{formatDate(transaction.createdAt)}</Text>
       </View>
       <View style={styles.amountContainer}>
-        <Text style={[styles.transactionAmount, { color: transaction.isDebit ? '#FF4444' : '#00AA44' }]}>
-          {transaction.isDebit ? '-' : '+'}{transaction.currency}{transaction.amount}
+        <Text style={[styles.transactionAmount, { color: transaction.status === 'COMPLETE' ? '#FF4444' : '#00AA44' }]}>
+          {transaction.receiptNumber}
         </Text>
       </View>
     </TouchableOpacity>
@@ -149,10 +90,41 @@ const TransactionSeparator: React.FC = () => <View style={styles.separator} />
 export default function TransactionHistoryScreen(
   _props: Readonly<RootStackScreenProps<'TransactionHistory'>>,
 ) {
+
+  const [transactions, setTransactions] = React.useState<OffchainTransaction[]>([]);
+
+  
+  const { data: walletClient } = useWalletClient({ networkId: 'celo-mainnet' });
+    const address = walletClient?.account?.address;
+
+  const { userOffchainTransactions } = useCkashReferral()
+
+  const fetchTransactions = async () => {
+    try {
+      if (!address) return;
+      const result = await userOffchainTransactions(address as `0x${string}`);
+      if (result?.success) { 
+        console.log("Results", result.transactions?.transactions);
+      setTransactions(result.transactions?.transactions as OffchainTransaction[]);
+
+      }
+      
+    } catch (error) {
+      console.error("Error fetching transactions:", error);
+    }
+  };
+  
+
+  React.useEffect(() => {
+    fetchTransactions();
+  }, [address]);
+
+   
+
   return (
     <View style={styles.container}>
       <FlatList
-        data={mockTransactions}
+        data={transactions}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <TransactionItem transaction={item} />}
         contentContainerStyle={styles.listContainer}
